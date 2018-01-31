@@ -1,4 +1,4 @@
-import { Component, Input, Output, HostListener, ElementRef, EventEmitter } from '@angular/core';
+import { Component, Input, Output, HostListener, ElementRef, EventEmitter, ViewChild } from '@angular/core';
 import { AfterViewChecked } from '@angular/core/src/metadata/lifecycle_hooks';
 import { WalkthroughTapIconsPath } from './ngWalkthroughTapIconsPath';
 
@@ -104,7 +104,9 @@ export class WalkthroughComponent implements AfterViewChecked {
   closeIcon: any;
   walkthroughIcon: any;
 
-  constructor(private element: ElementRef) {
+  @ViewChild("walkthrough-component") element: ElementRef;
+
+  constructor() {
   }
 
   /**
