@@ -1,0 +1,1 @@
+{"version":3,"names":[],"mappings":"","sources":["components/ngWalkthroughTapIconsPath.d.ts"],"sourcesContent":["export declare class WalkthroughTapIconsPath {\n    single_tap: string;\n    double_tap: string;\n    swipe_down: string;\n    swipe_left: string;\n    swipe_right: string;\n    swipe_up: string;\n}\n"],"file":"ngWalkthroughTapIconsPath.d.ts"}
