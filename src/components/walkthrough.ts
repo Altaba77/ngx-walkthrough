@@ -104,7 +104,7 @@ export class WalkthroughComponent implements AfterViewChecked {
   closeIcon: any;
   walkthroughIcon: any;
 
-  @ViewChild("walkthrough-component") element: ElementRef;
+  @ViewChild("walkthroughcomponent") element: ElementRef;
 
   constructor() {
   }
