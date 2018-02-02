@@ -47,7 +47,7 @@ import { WalkthroughTapIconsPath } from './ngWalkthroughTapIconsPath';
   </div>
 </div>
 `,
-  styleUrls:[
+  styles:[
     `
   .walkthrough-hole-glow {
       position: absolute;

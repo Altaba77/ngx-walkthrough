@@ -48,7 +48,7 @@ gulp.task('compile-typings', function() {
         .pipe(tsProject())
         .pipe(sourcemaps.init())
         .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('dist'));
+        .pipe(gulp.dest('dist/src'));
 });
 
 //----
