@@ -4,8 +4,275 @@ import { WalkthroughTapIconsPath } from './ngWalkthroughTapIconsPath';
 
 @Component({
   selector: 'walkthrough',
-  templateUrl: 'walkthrough.html',
-  styleUrls:['./walkthrough.css']
+  templateUrl: `
+  <div #walkthroughcomponent class="{{DOM_WALKTHROUGH_CLASS}}" [hidden]="!isVisible" [ngClass]="{'walkthrough-active': isVisible}" (click)="onCloseClicked($event)">
+  <div class="walkthrough-container walkthrough-container-transparency" [hidden]="walkthroughType!=='transparency'">
+    <div class="walkthrough-inner">
+      <div class="{{DOM_TRANSCLUDE}}">
+        <ng-content select="img"></ng-content>
+      </div>
+      <div class="walkthrough-non-transclude-template" [hidden]="hasTransclude">
+        <div class="walkthrough-text-container" [ngClass]="{'walkthrough-top': (!forceCaptionLocation || forceCaptionLocation==='TOP'), 'walkthrough-bottom': forceCaptionLocation==='BOTTOM'}">
+          <pre class="walkthrough-element walkthrough-text" [innerHTML]="mainCaption"></pre>
+          <img *ngIf="walkthroughHeroImage" class="walkthrough-element walkthrough-hero-image" src="{{walkthroughHeroImage}}" (click)="onWalkthroughContentClicked()">
+        </div>
+        <img class="walkthrough-element walkthrough-icon" [hidden]="walkthroughIconWanted && walkthroughIconWanted==='arrow'" src="{{walkthroughIcon}}">
+        <div class="walkthrough-element walkthrough-arrow" [hidden]="walkthroughIconWanted!=='arrow'"></div>
+        <button class="walkthrough-element walkthrough-button-positive walkthrough-done-button" type="button" *ngIf="useButton" (click)="onCloseClicked($event)">
+          {{buttonCaption}}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="walkthrough-container walkthrough-container-tip" [hidden]="walkthroughType!=='tip'">
+    <div class="walkthrough-inner" [ngClass]="{'walkthrough-top': ((!forceCaptionLocation && !tipLocation) || forceCaptionLocation==='TOP' || tipLocation =='TOP'), 'walkthrough-bottom': (forceCaptionLocation=='BOTTOM' || tipLocation =='BOTTOM')}">
+      <img class="walkthrough-element walkthrough-tip-icon-text-box" [ngClass]="{'walkthrough-tip-icon-image-front': tipIconLocation==='FRONT', 'walkthrough-tip-icon-image-back': tipIconLocation=='BACK'}"
+        [hidden]="walkthroughIconWanted && walkthroughIconWanted==='arrow'" src="{{walkthroughIcon}}" alt="icon">
+      <button class="walkthrough-done-button walkthrough-tip-done-button-text-box" [ngClass]="{'walkthrough-tip-done-button-no-icon': !icon}"
+        type="button" *ngIf="useButton" (click)="onCloseClicked($event)">
+        <img class="walkthrough-tip-button-image-text-box" src="{{closeIcon}}" alt="x">
+      </button>
+      <div class="walkthrough-element walkthrough-tip-text-box" (click)="onWalkthroughContentClicked()" [ngClass]="{'walkthrough-tip-text-box-color-black': tipColor=='BLACK', 'walkthrough-tip-text-box-color-white': tipColor=='WHITE'}">
+        <pre [innerHTML]="mainCaption"></pre>
+        <img *ngIf="walkthroughHeroImage" class="walkthrough-element walkthrough-hero-image" src="{{walkthroughHeroImage}}">
+        <div class="{{DOM_TRANSCLUDE}}">
+          <ng-content select="img"></ng-content>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div [hidden]="!hasBackdrop" class="walkthrough-hole" [ngClass]="{'walkthrough-hole-round': isRound}">
+  </div>
+  <div [hidden]="!(hasGlow && (focusElementSelector))" class="walkthrough-hole walkthrough-hole-glow" [ngClass]="{'walkthrough-hole-round': isRound}">
+  </div>
+</div>
+`,
+  styleUrls:[
+    `
+  .walkthrough-hole-glow {
+      position: absolute;
+      outline: none;
+      border: 2px solid #FFFF66 !important;
+      box-shadow: 0 0 36px #FFFF66 !important;
+      -webkit-appearance: none;
+      box-sizing: border-box;
+  }
+
+  .walkthrough-background {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: initial;
+      text-align: center;
+      -webkit-transition: height 0s ease-out .2s, opacity .2s ease-out;
+      -moz-transition: height 0s ease-out .2s, opacity .2s ease-out;
+      -o-transition: height 0s ease-out .2s, opacity .2s ease-out;
+      transition: height 0s ease-out .2s, opacity .2s ease-out;
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+      z-index: 1000;
+  }
+
+  .walkthrough-hole {
+      position: absolute;
+      -moz-box-shadow: 0 0 0 1997px rgba(0, 0, 0, 0.8);
+      -webkit-box-shadow: 0 0 0 1997px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 0 0 1997px rgba(0, 0, 0, 0.8);
+      -webkit-appearance: none;
+  }
+
+  .walkthrough-element.walkthrough-text {
+      margin-top: 10%;
+      width: 50%;
+      color: #fff;
+      text-align: center;
+  }
+
+  .walkthrough-element.walkthrough-done-button {
+      position: absolute;
+      bottom: 30px;
+      height: 30px;
+      width: 80px;
+      display: inline-block;
+      right: 30px;
+      margin: 0 auto;
+  }
+
+  .walkthrough-button-positive {
+      border-color: #0c63ee;
+      background-color: #387ef5;
+      color: #fff;
+  }
+
+  .walkthrough-button-positive:hover {
+      color: #fff;
+      text-decoration: none;
+  }
+
+  .walkthrough-button-positive.active {
+      border-color: #0c63ee;
+      background-color: #0c63ee;
+      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .walkthrough-element.walkthrough-icon {
+      height: 200px;
+  }
+
+  .walkthrough-element.walkthrough-arrow {
+      color: #ffffff;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+  }
+
+  .walkthrough-element {
+      z-index: 1001;
+      position: relative;
+      margin-left: auto;
+      margin-right: auto;
+  }
+
+  .walkthrough-background.walkthrough-active {
+      -webkit-transition: opacity .2s ease-out;
+      -moz-transition: opacity .2s ease-out;
+      -o-transition: opacity .2s ease-out;
+      transition: opacity .2s ease-out;
+      opacity: 1;
+      height: 100%;
+      pointer-events: all;
+  }
+
+  .walkthrough-transclude {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+  }
+
+  .walkthrough-hole-round {
+      border-radius: 200px;
+  }
+
+  .walkthrough-tip-text-box {
+      /*top: 128px;*/
+      position: relative;
+      margin-left: 16px;
+      margin-right: 16px;
+      border: 2px solid;
+      border-radius: 35px;
+      padding: 14px;
+      word-break: break-all !important;
+
+      /*margin-top: 0;*/
+      /*margin-bottom: 0;*/
+  }
+
+  .walkthrough-container {
+      float: left;
+      position: relative;
+      height: 100%;
+      width: 100%;
+  }
+
+  .walkthrough-inner {
+      position: fixed;
+      z-index: 3;
+      width: 100%;
+  }
+
+  .walkthrough-container-transparency > .walkthrough-inner {
+      height: 100%;
+  }
+
+  .walkthrough-text-container {
+      position: absolute;
+      width: 100%;
+  }
+
+  .walkthrough-container-tip .walkthrough-top, .walkthrough-container-transparency .walkthrough-top {
+      top: 15px;
+  }
+
+  .walkthrough-container-tip .walkthrough-bottom {
+      bottom: 0;
+  }
+
+  /* take 'done' button into consideration */
+  .walkthrough-container-transparency .walkthrough-bottom {
+      bottom: 70px;
+  }
+
+  .walkthrough-tip-icon-image-front {
+      z-index: 1002;
+  }
+
+  .walkthrough-tip-icon-image-back {
+      z-index: 999;
+  }
+
+  .walkthrough-tip-icon-text-box {
+      height: 142px;
+
+      /*right: 9%;*/
+      position: relative;
+      margin-bottom: -32px;
+      margin-right: -250px;
+
+      /*bottom: 70px;*/
+  }
+
+  .walkthrough-tip-done-button-text-box {
+      /*top: 109px;*/
+      /*bottom: 59px;*/
+      position: relative;
+      z-index: 1002;
+
+      /*right: -7px;*/
+      margin-top: 107px;
+      background-color: transparent;
+      border: 0;
+      float: right;
+  }
+
+  .walkthrough-tip-done-button-no-icon {
+      margin-top: -13px !important;
+  }
+
+  .walkthrough-tip-button-image-text-box {
+      width: 42px;
+      height: 42px;
+  }
+
+  .walkthrough-tip-text-box-color-black {
+      border-color: #ffffff;
+      background-color: #000000;
+      color: #ffffff;
+  }
+
+  .walkthrough-tip-text-box-color-white {
+      border-color: #000000;
+      background-color: #ffffff;
+  }
+
+  .walkthrough-hero-image {
+      margin-top: 15px;
+  }
+
+  .walkthrough-transclude img {
+      height: 100vh;
+      width: 100%;
+  }
+
+  pre {
+      white-space: pre-wrap;
+  }
+  `]
 })
 export class WalkthroughComponent implements AfterViewChecked {
   @Input("walkthrough-type") walkthroughType: string;
