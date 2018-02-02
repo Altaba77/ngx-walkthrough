@@ -4,7 +4,8 @@ import { WalkthroughTapIconsPath } from './ngWalkthroughTapIconsPath';
 
 @Component({
   selector: 'walkthrough',
-  templateUrl: 'walkthrough.html'
+  templateUrl: 'walkthrough.html',
+  styleUrls:['./walkthrough.css']
 })
 export class WalkthroughComponent implements AfterViewChecked {
   @Input("walkthrough-type") walkthroughType: string;
