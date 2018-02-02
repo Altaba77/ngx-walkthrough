@@ -1,6 +1,5 @@
 import { Component, Input, Output, HostListener, ElementRef, EventEmitter, ViewChild } from '@angular/core';
 import { AfterViewChecked } from '@angular/core/src/metadata/lifecycle_hooks';
-import { WalkthroughTapIconsPath } from './ngWalkthroughTapIconsPath';
 
 @Component({
   selector: 'walkthrough',
@@ -360,8 +359,6 @@ export class WalkthroughComponent implements AfterViewChecked {
   PADDING_ARROW_START = 5;
   PADDING_ARROW_MARKER = 25;
 
-  ngWalkthroughTapIcons: WalkthroughTapIconsPath = new WalkthroughTapIconsPath();
-
   isVisible; boolean = false;
   hasTransclude: boolean;
 
@@ -369,8 +366,20 @@ export class WalkthroughComponent implements AfterViewChecked {
   walkthroughTextElement: HTMLElement;
   walkthroughIconElement: HTMLElement;
   walkthroughArrowElement: HTMLElement;
-  closeIcon: any;
+  closeIcon: string;
   walkthroughIcon: any;
+
+  single_tap: string = require("../images/components/icons/Single_Tap.png");
+
+  double_tap: string = require("../images/components/icons/Double_Tap.png");
+
+  swipe_down: string = require("../images/components/icons/Swipe_Down.png");
+
+  swipe_left: string = require("../images/components/icons/Swipe_Left.png");
+
+  swipe_right: string = require("../images/components/icons/Swipe_Right.png");
+
+  swipe_up: string = require("../images/components/icons/Swipe_Up.png");
 
   @ViewChild("walkthroughcomponent") element: ElementRef;
 
@@ -427,30 +436,29 @@ export class WalkthroughComponent implements AfterViewChecked {
    */
   getIcon(icon) {
     let retval = null;
-    if (this.ngWalkthroughTapIcons) {
       switch (icon) {
         case ("single_tap"):
-          retval = this.ngWalkthroughTapIcons.single_tap;
+          retval = this.single_tap;
           break;
         case ("double_tap"):
-          retval = this.ngWalkthroughTapIcons.double_tap;
+          retval = this.double_tap;
           break;
         case ("swipe_down"):
-          retval = this.ngWalkthroughTapIcons.swipe_down;
+          retval = this.swipe_down;
           break;
         case ("swipe_left"):
-          retval = this.ngWalkthroughTapIcons.swipe_left;
+          retval = this.swipe_left;
           break;
         case ("swipe_right"):
-          retval = this.ngWalkthroughTapIcons.swipe_right;
+          retval = this.swipe_right;
           break;
         case ("swipe_up"):
-          retval = this.ngWalkthroughTapIcons.swipe_up;
+          retval = this.swipe_up;
           break;
         case ("arrow"):
           retval = ""; //Return nothing, using other dom element for arrow
           break;
-      }
+      
     }
     if (retval === null && icon && icon.length > 0) {
       retval = icon;

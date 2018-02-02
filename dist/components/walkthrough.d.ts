@@ -1,6 +1,5 @@
 import { ElementRef, EventEmitter } from '@angular/core';
 import { AfterViewChecked } from '@angular/core/src/metadata/lifecycle_hooks';
-import { WalkthroughTapIconsPath } from './ngWalkthroughTapIconsPath';
 export declare class WalkthroughComponent implements AfterViewChecked {
     walkthroughType: string;
     buttonCaption: string;
@@ -36,7 +35,6 @@ export declare class WalkthroughComponent implements AfterViewChecked {
     PADDING_HOLE: number;
     PADDING_ARROW_START: number;
     PADDING_ARROW_MARKER: number;
-    ngWalkthroughTapIcons: WalkthroughTapIconsPath;
     isVisible: any;
     boolean: boolean;
     hasTransclude: boolean;
@@ -44,8 +42,14 @@ export declare class WalkthroughComponent implements AfterViewChecked {
     walkthroughTextElement: HTMLElement;
     walkthroughIconElement: HTMLElement;
     walkthroughArrowElement: HTMLElement;
-    closeIcon: any;
+    closeIcon: string;
     walkthroughIcon: any;
+    single_tap: string;
+    double_tap: string;
+    swipe_down: string;
+    swipe_left: string;
+    swipe_right: string;
+    swipe_up: string;
     element: ElementRef;
     constructor();
     resizeHandler(): void;

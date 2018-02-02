@@ -8,7 +8,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component, Input, Output, HostListener, ElementRef, EventEmitter, ViewChild } from '@angular/core';
-import { WalkthroughTapIconsPath } from './ngWalkthroughTapIconsPath';
 var WalkthroughComponent = (function () {
     function WalkthroughComponent() {
         this.useButton = false;
@@ -31,8 +30,13 @@ var WalkthroughComponent = (function () {
         this.PADDING_HOLE = 5;
         this.PADDING_ARROW_START = 5;
         this.PADDING_ARROW_MARKER = 25;
-        this.ngWalkthroughTapIcons = new WalkthroughTapIconsPath();
         this.boolean = false;
+        this.single_tap = require("../images/components/icons/Single_Tap.png");
+        this.double_tap = require("../images/components/icons/Double_Tap.png");
+        this.swipe_down = require("../images/components/icons/Swipe_Down.png");
+        this.swipe_left = require("../images/components/icons/Swipe_Left.png");
+        this.swipe_right = require("../images/components/icons/Swipe_Right.png");
+        this.swipe_up = require("../images/components/icons/Swipe_Up.png");
         this.close_icon = "data:image/png;base64," +
             "iVBORw0KGgoAAAANSUhEUgAAAG4AAABuCAYAAADGWyb7AAAAAXNSR0IArs4c6QAAAAlwSFlzAAAL" +
             "EwAACxMBAJqcGAAABCZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADx4OnhtcG1ldGEgeG1sbnM6" +
@@ -213,30 +217,28 @@ var WalkthroughComponent = (function () {
     };
     WalkthroughComponent.prototype.getIcon = function (icon) {
         var retval = null;
-        if (this.ngWalkthroughTapIcons) {
-            switch (icon) {
-                case ("single_tap"):
-                    retval = this.ngWalkthroughTapIcons.single_tap;
-                    break;
-                case ("double_tap"):
-                    retval = this.ngWalkthroughTapIcons.double_tap;
-                    break;
-                case ("swipe_down"):
-                    retval = this.ngWalkthroughTapIcons.swipe_down;
-                    break;
-                case ("swipe_left"):
-                    retval = this.ngWalkthroughTapIcons.swipe_left;
-                    break;
-                case ("swipe_right"):
-                    retval = this.ngWalkthroughTapIcons.swipe_right;
-                    break;
-                case ("swipe_up"):
-                    retval = this.ngWalkthroughTapIcons.swipe_up;
-                    break;
-                case ("arrow"):
-                    retval = "";
-                    break;
-            }
+        switch (icon) {
+            case ("single_tap"):
+                retval = this.single_tap;
+                break;
+            case ("double_tap"):
+                retval = this.double_tap;
+                break;
+            case ("swipe_down"):
+                retval = this.swipe_down;
+                break;
+            case ("swipe_left"):
+                retval = this.swipe_left;
+                break;
+            case ("swipe_right"):
+                retval = this.swipe_right;
+                break;
+            case ("swipe_up"):
+                retval = this.swipe_up;
+                break;
+            case ("arrow"):
+                retval = "";
+                break;
         }
         if (retval === null && icon && icon.length > 0) {
             retval = icon;
