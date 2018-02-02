@@ -4,7 +4,7 @@ import { WalkthroughTapIconsPath } from './ngWalkthroughTapIconsPath';
 
 @Component({
   selector: 'walkthrough',
-  templateUrl: `
+  template: `
   <div #walkthroughcomponent class="{{DOM_WALKTHROUGH_CLASS}}" [hidden]="!isVisible" [ngClass]="{'walkthrough-active': isVisible}" (click)="onCloseClicked($event)">
   <div class="walkthrough-container walkthrough-container-transparency" [hidden]="walkthroughType!=='transparency'">
     <div class="walkthrough-inner">
