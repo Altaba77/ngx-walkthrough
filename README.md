@@ -1,5 +1,5 @@
 # ngx-walkthrough
-Update of https://github.com/souly1/ng-walkthrough for angular > 4
+Update of https://github.com/souly1/ng-walkthrough for angular > 4 and ionic > 3
 
 One of the most common design challenges emerging in mobile design is that of 'invitation' - creating an explanation walk through during user first interaction with the app so to engage him.
 Following Theresa Neil's design patterns from [Mobile Design Pattern Gallery] (http://www.amazon.com/gp/product/1449314325/ref=as_li_ss_tl?ie=UTF8&tag=uxbo09-20&linkCode=as2&camp=217145&creative=399373&creativeASIN=1449314325)
@@ -26,19 +26,14 @@ Tip walkthrough mode:
 
 # Demo
 
-A demo of the previous version was created to show:
+A demo of the previous version was created to show (note that the attributes must be written in bracket now):
  * The 2 basic transparency overlay types in 3 demoes fitting the screenshot examples -  one basic template, one with arrows, and the last freestyle one using transclude.
  * The tip mode walkthrough
 [Demo can be found here](http://plnkr.co/edit/kHM9zHCxAA3gPYvedmdw?p=preview)
 
 ## Requirements
 
-- AngularJS
-- No need for JQuery as JQLite is used
-
-## Notes
-
-This component has been originally developed for the [Ionic Framework](http://ionicframework.com), so it supports both angular and ionic apps.
+- Angular4 or superior
 
 ## Installation
 
@@ -63,20 +58,20 @@ and use one of the two configurations:
 
 ```html
 <walkthrough
-            is-round=true
-            walkthrough-type="transparency"
-            focus-element-selector="#focusItem"
-            icon="single_tap"
-            main-caption="This is some text"
-            is-active="isActive"
-            use-button=true>
+            [is-round]=true
+            [walkthrough-type]="transparency"
+            [focus-element-selector]="#focusItem"
+            [icon]="single_tap"
+            [main-caption]="This is some text"
+            [is-active]="isActive"
+            [use-button]=true>
 </walkthrough>
 ```
 
 ## Usage Example 2 - transparency using transclude option
 
 ```html
-<walkthrough is-active="isActive" walkthrough-type="transparency">
+<walkthrough [is-active]="isActive" [walkthrough-type]="transparency">
   <img src="images/ImageTutorialExample.png" style="height: 100vh; width: 100%;">
 </walkthrough>
 ```
@@ -85,14 +80,14 @@ and use one of the two configurations:
 
 ```html
 <walkthrough
-            walkthrough-type="tip"
-            icon="images/myLogo.png"
-            tip-icon-location="FRONT"
-            tip-location="TOP"
-            main-caption="This is some text"
-            tip-color="BLACK"
-            is-active="isActive"
-            use-button=true>
+            [walkthrough-type]="tip"
+            [icon]="images/myLogo.png"
+            [tip-icon-location]="FRONT"
+            [tip-location]="TOP"
+            [main-caption]="This is some text"
+            [tip-color]="BLACK"
+            [is-active]="isActive"
+            [use-button]=true>
 </walkthrough>
 ```
 
@@ -127,4 +122,4 @@ On going...
 
 ## License
 
-As AngularJS itself, this module is released under the permissive [MIT license](http://revolunet.mit-license.org). Your contributions are always welcome.
+As Angular itself, this module is released under the permissive [MIT license](http://revolunet.mit-license.org). Your contributions are always welcome.
