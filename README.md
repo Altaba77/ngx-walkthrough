@@ -1,5 +1,6 @@
 # ngx-walkthrough
-Update of https://github.com/souly1/ng-walkthrough for angular > 4 and ionic > 3
+
+Update of https://github.com/souly1/ng-walkthrough for angular > 5
 
 One of the most common design challenges emerging in mobile design is that of 'invitation' - creating an explanation walk through during user first interaction with the app so to engage him.
 Following Theresa Neil's design patterns from [Mobile Design Pattern Gallery] (http://www.amazon.com/gp/product/1449314325/ref=as_li_ss_tl?ie=UTF8&tag=uxbo09-20&linkCode=as2&camp=217145&creative=399373&creativeASIN=1449314325)
@@ -7,6 +8,7 @@ Following Theresa Neil's design patterns from [Mobile Design Pattern Gallery] (h
 This angular component implements a walkthrough via one of the following patterns: the transparency pattern or the tip pattern (an explanation about the different patterns can be found online at [ux booth](http://www.uxbooth.com/articles/mobile-design-patterns/))
 
 # Special features
+
  - Use the transparency walkthrough either using transclude or given attributes which contain basics such as text, gesture image, 'got it' button
  - In transparency walkthrough easily highlight a DOM element (see demo)
  - Use any image you want or choose a gesture image from the given collection (such as swipe with direction or tap) and place it bound to the element mentioned above.
@@ -14,6 +16,7 @@ This angular component implements a walkthrough via one of the following pattern
  - In tip mode add an Icon to sit on top or behind the tip text box
 
 ## ScreenShots
+
 Transparency walkthrough in Classic, Classic with arrow mode and Totally customizable mode respectively:
 
 ![alt tag](/screenshots/screenshot1.png)
@@ -33,7 +36,7 @@ A demo of the previous version was created to show (note that the attributes mus
 
 ## Requirements
 
-- Angular4 or superior
+- Angular 5 or superior
 
 ## Installation
 

@@ -14,7 +14,7 @@ gulp.task('build', function (done) {
   
   runSequence(
     'clean',
-    'compile-sass',
+   // 'compile-sass',
     'compile-typings',
     'image'
   );
