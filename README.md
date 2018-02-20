@@ -17,7 +17,7 @@ This angular component implements a walkthrough via one of the following pattern
 
 ## ScreenShots
 
-Transparency walkthrough in Classic, Classic with arrow mode and Totally customizable mode respectively:
+Transparency walkthrough in Classic, Classic with arrow mode and Totally customizable mode respectively (these screenshots have been realized on the previous version of the library, the design can be slightly different now):
 
 ![alt tag](/screenshots/screenshot1.png)
 ![alt tag](/screenshots/screenshot2.png)
@@ -47,14 +47,16 @@ A demo of the previous version was created to show (note that the attributes mus
 
 Import the module in your appplication module
 
+import { WalkthroughModule } from 'ngx-walkthrough';
+
 You can now use the component, add the element to your HTML:
 ```html
-<walkthrough walkthrough-type="X">
+<walkthrough [walkthrough-type]="X">
   ...
 </walkthrough>
 ```
 and use one of the two configurations:
-    1> Place any HTML code as you like instead of the three dotes as this uses the Angular transclude ability. Make sure to specify walkthrough-type="transparency" or "tip" for this to work.
+    1> Place any HTML code as you like instead of the three dotes as this uses the Angular transclude ability. Make sure to specify [walkthrough-type]="transparency" or "tip" for this to work.
     2> Use the additional optional properties the component has to quickly create a walkthrough screen.
 
 ## Usage Example 1 - transparency Non transclude option
