@@ -1,6 +1,6 @@
 {
   "name": "ngx-walkthrough",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "One of the most common design challenges emerging in mobile design is that of 'invitation' - creating an explanation walk through during user first interaction with the app so to engage the customer. Following Theresa Neil's design pattern from Mobile Design Pattern Gallery",
   "main": "index.js",
   "types": "index.d.ts",
