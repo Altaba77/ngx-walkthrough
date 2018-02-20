@@ -29,7 +29,7 @@ Tip walkthrough mode:
 
 # Demo
 
-A demo of the previous version was created to show (note that the attributes must be written in bracket now):
+A demo of the previous version was created to show (**Note**: that the attributes have been changed, see example bellow):
  * The 2 basic transparency overlay types in 3 demoes fitting the screenshot examples -  one basic template, one with arrows, and the last freestyle one using transclude.
  * The tip mode walkthrough
 [Demo can be found here](http://plnkr.co/edit/kHM9zHCxAA3gPYvedmdw?p=preview)
@@ -47,11 +47,32 @@ A demo of the previous version was created to show (note that the attributes mus
 
 Import the module in your appplication module
 
+```ts
 import { WalkthroughModule } from 'ngx-walkthrough';
+```
+
+then declare it in your app imports:
+
+```ts
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+import { WalkthroughModule } from 'ngx-walkthrough';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    WalkthroughModule
+  ],
+  declarations: [ AppComponent ],
+  bootstrap: [ AppComponent ]
+})
+export class AppModule {}
+```
 
 You can now use the component, add the element to your HTML:
 ```html
-<walkthrough [walkthrough-type]="X">
+<walkthrough [walkthrough-type]="'X'">
   ...
 </walkthrough>
 ```
@@ -63,20 +84,20 @@ and use one of the two configurations:
 
 ```html
 <walkthrough
-            [is-round]=true
-            [walkthrough-type]="transparency"
-            [focus-element-selector]="#focusItem"
-            [icon]="single_tap"
-            [main-caption]="This is some text"
-            [is-active]="isActive"
-            [use-button]=true>
+            [is-round]="true"
+            [walkthrough-type]="'transparency'"
+            [focus-element-selector]="'#focusItem'"
+            [icon]="'single_tap'"
+            [main-caption]="'This is some text'"
+            [is-active]="true"
+            [use-button]="true">
 </walkthrough>
 ```
 
 ## Usage Example 2 - transparency using transclude option
 
 ```html
-<walkthrough [is-active]="isActive" [walkthrough-type]="transparency">
+<walkthrough [is-active]="true" [walkthrough-type]="'transparency'">
   <img src="images/ImageTutorialExample.png" style="height: 100vh; width: 100%;">
 </walkthrough>
 ```
@@ -85,17 +106,50 @@ and use one of the two configurations:
 
 ```html
 <walkthrough
-            [walkthrough-type]="tip"
-            [icon]="images/myLogo.png"
-            [tip-icon-location]="FRONT"
-            [tip-location]="TOP"
-            [main-caption]="This is some text"
-            [tip-color]="BLACK"
-            [is-active]="isActive"
-            [use-button]=true>
+            [walkthrough-type]="'tip'"
+            [icon]="'images/myLogo.png'"
+            [tip-icon-location]="'FRONT'"
+            [tip-location]="'TOP'"
+            [main-caption]="'This is some text'"
+            [tip-color]="'BLACK'"
+            [is-active]="true"
+            [use-button]="true">
 </walkthrough>
 ```
 
+## Usage Example 4 - transparency Non transclude option full code with output
+```ts
+import { Component } from '@angular/core';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { Observable } from 'rxjs/Observable';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <walkthrough
+                [is-round]="true"
+                [walkthrough-type]="'transparency'"
+                [focus-element-selector]="'#focusItem'"
+                [icon]="'arrow'"
+                [main-caption]="'This is some text'"
+                [is-active]="true"
+                [use-button]="true"
+                (on-walkthrough-show)="myShowFunction()"
+                (on-walkthrough-hide)="myHideFunction()">
+    </walkthrough>
+  `
+})
+export class MyApp {
+  constructor() {
+  }
+  myShowFunction(){
+    console.log("show event");
+  }
+   myHideFunction(){
+    console.log("hide event");
+  }
+}
+```
 
 ## component Attributes
 Inputs:
