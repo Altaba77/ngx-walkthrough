@@ -2,6 +2,7 @@ $ cat .gitignore
 /node_modules
 /documentation
 /coverage
+/old
 
 *.log
 *.tgz
