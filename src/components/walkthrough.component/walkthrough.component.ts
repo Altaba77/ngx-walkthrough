@@ -867,11 +867,11 @@ export class WalkthroughComponent implements AfterViewChecked {
     if (selectedElements) {
       for (let i = 0; i < selectedElements.length; ++i) {
         const curElement: HTMLElement = selectedElements.item(i) as HTMLElement;
+        console.log(`focus elem ${i} z-index is ${this._focusElementZindexes[i]} `);
         if (this._focusElementZindexes[i] !== ZINDEX_NOT_SET) {
           curElement.style.zIndex = this._focusElementZindexes[i];
         } else {
-          curElement.style.zIndex = null;
-          delete curElement.style.zIndex;
+          curElement.style.zIndex = 'auto';
         }
       }
       this._focusElementZindexes = [];
