@@ -4020,10 +4020,12 @@ class WalkthroughComponent {
         if (this.focusElementInteractive && selectorElements) {
             for (let /** @type {?} */ i = 0; i < selectorElements.length; ++i) {
                 const /** @type {?} */ selectorElement = /** @type {?} */ (selectorElements.item(i));
-                this._focusElementZindexes[i] = (selectorElement.style.zIndex !== '99999' && selectorElement.style.zIndex) ?
-                    selectorElement.style.zIndex :
-                    ZINDEX_NOT_SET;
-                selectorElement.style.zIndex = '99999';
+                if (selectorElement.style.zIndex !== '99999') {
+                    this._focusElementZindexes[i] = (selectorElement.style.zIndex) ?
+                        selectorElement.style.zIndex :
+                        ZINDEX_NOT_SET;
+                    selectorElement.style.zIndex = '99999';
+                }
             }
         }
     }
