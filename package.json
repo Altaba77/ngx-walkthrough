@@ -1,7 +1,11 @@
 {
     "name": "ngx-walkthrough",
     "private": true,
-    "version": "0.2.0",
+    "version": "0.2.3",
+    "engines": {
+        "node": "9.8.0",
+        "npm": "5.6.9"
+    },
     "description": "Build an Angular library compatible with AoT compilation and Tree shaking like an official package",
     "main": "./bundles/walkthrough.umd.js",
     "module": "./esm5/walkthrough.js",
@@ -76,6 +80,7 @@
         "tslint-angular": "1.0.0",
         "typescript": "2.4.2",
         "uglify-js": "3.1.6",
+        "uglifyjs": "^2.4.11",
         "webpack": "3.8.1",
         "zone.js": "0.8.18"
     }

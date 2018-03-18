@@ -7,7 +7,7 @@ Following Theresa Neil's design patterns from [Mobile Design Pattern Gallery] (h
 
 This angular component implements a walkthrough via one of the following patterns: the transparency pattern or the tip pattern (an explanation about the different patterns can be found online at [ux booth](http://www.uxbooth.com/articles/mobile-design-patterns/))
 
-Get the [Changelog](https://github.com/Altaba77/ngx-walkthrough/CHANGELOG.md).
+Get the [Changelog](https://github.com/Altaba77/ngx-walkthrough/blob/master/CHANGELOG.md).
 
 # Special features
 

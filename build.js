@@ -55,7 +55,7 @@ if (shell.exec(`rollup -c rollup.config.js -i ${ESM5_DIR}/${PACKAGE}.js -o ${BUN
 
 shell.echo(`Minifying`);
 shell.cd(`${BUNDLES_DIR}`);
-shell.exec(`uglifyjs ${PACKAGE}.umd.js -c --comments -o ${PACKAGE}.umd.min.js --source-map "filename='${PACKAGE}.umd.min.js.map', includeSources"`);
+shell.exec(`PATH=$PATH:./node_modules/.bin/ uglifyjs ${PACKAGE}.umd.js -c --comments -o ${PACKAGE}.umd.min.js --source-map "filename='${PACKAGE}.umd.min.js.map', includeSources"`);
 shell.cd(`..`);
 shell.cd(`..`);
 

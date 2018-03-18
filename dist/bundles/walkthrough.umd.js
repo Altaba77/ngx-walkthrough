@@ -8498,14 +8498,11 @@ var Hotspot_Close = (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes} checked by tsc
  */
+var ZINDEX_NOT_SET = '-99999';
 var WalkthroughComponent = (function () {
     function WalkthroughComponent() {
-        this.useButton = false;
-        this.hasGlow = false;
-        this.isRound = false;
-        this.onWalkthroughShowEvent = new core.EventEmitter();
-        this.onWalkthroughHideEvent = new core.EventEmitter();
-        this.onWalkthroughContentClickedEvent = new core.EventEmitter();
+        // members (must come first - tslint)
+        this._focusElementZindexes = [];
         this.DOM_WALKTHROUGH_CLASS = "walkthrough-background";
         this.DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS = ".walkthrough-text";
         this.DOM_WALKTHROUGH_TIP_TEXT_CLASS = ".walkthrough-tip-text-box";
@@ -8521,19 +8518,26 @@ var WalkthroughComponent = (function () {
         this.PADDING_ARROW_MARKER = 25;
         this.isVisible = false;
         this.hasTransclude = false;
-        // single_tap: string = require("../assets/Single_Tap.png");
-        // double_tap: string = require("../assets/Double_Tap.png");
-        // swipe_down: string = require("../assets/Swipe_Down.png");
-        // swipe_left: string = require("../assets/Swipe_Left.png");
-        // swipe_right: string = require("../assets/Swipe_Right.png");
-        // swipe_up: string = require("../assets/Swipe_Up.png");
-        //the element have been separated as ionic pro cannot handle class with very large string
+        // single_tap: string = require('../assets/Single_Tap.png');
+        // double_tap: string = require('../assets/Double_Tap.png');
+        // swipe_down: string = require('../assets/Swipe_Down.png');
+        // swipe_left: string = require('../assets/Swipe_Left.png');
+        // swipe_right: string = require('../assets/Swipe_Right.png');
+        // swipe_up: string = require('../assets/Swipe_Up.png');
+        // the element have been separated as ionic pro cannot handle class with very large string
         this.single_tap = new Single_Tap().single_tap;
         this.double_tap = new Double_Tap().double_tap;
         this.swipe_down = new Swipe_Down().swipe_down;
         this.swipe_left = new Swipe_Left().swipe_left;
         this.swipe_right = new Swipe_Right().swipe_right;
         this.swipe_up = new Swipe_Up().swipe_up;
+        this.useButton = false;
+        this.hasGlow = false;
+        this.isRound = false;
+        this.focusElementInteractive = false;
+        this.onWalkthroughShowEvent = new core.EventEmitter();
+        this.onWalkthroughHideEvent = new core.EventEmitter();
+        this.onWalkthroughContentClickedEvent = new core.EventEmitter();
     }
     Object.defineProperty(WalkthroughComponent.prototype, "focusElementSelector", {
         get: /**
@@ -8576,7 +8580,7 @@ var WalkthroughComponent = (function () {
                 catch (/** @type {?} */ e) {
                     console.warn('failed to focus on element prior to timeout: ' + this.focusElementSelector);
                 }
-                //Must timeout to make sure we have final correct coordinates after screen totally load
+                // Must timeout to make sure we have final correct coordinates after screen totally load
                 if (this.focusElementSelector) {
                     setTimeout(function () {
                         _this.setFocusOnElement();
@@ -8635,9 +8639,9 @@ var WalkthroughComponent = (function () {
         var _this = this;
         var /** @type {?} */ holeElements = this.element.nativeElement.querySelectorAll(this.DOM_WALKTHROUGH_HOLE_CLASS);
         this.walkthroughHoleElements = /** @type {?} */ (holeElements[0]);
-        var /** @type {?} */ textClass = (this.walkthroughType === "tip") ? this.DOM_WALKTHROUGH_TIP_TEXT_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS;
+        var /** @type {?} */ textClass = (this.walkthroughType === 'tip') ? this.DOM_WALKTHROUGH_TIP_TEXT_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS;
         this.walkthroughTextElement = /** @type {?} */ (this.element.nativeElement.querySelectorAll(textClass)[0]);
-        var /** @type {?} */ iconClass = (this.walkthroughType === "tip") ? this.DOM_WALKTHROUGH_TIP_ICON_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS;
+        var /** @type {?} */ iconClass = (this.walkthroughType === 'tip') ? this.DOM_WALKTHROUGH_TIP_ICON_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS;
         this.walkthroughIconElement = /** @type {?} */ (this.element.nativeElement.querySelectorAll(iconClass)[0]);
         this.walkthroughArrowElement = /** @type {?} */ (this.element.nativeElement.querySelectorAll(this.DOM_WALKTHROUGH_ARROW_CLASS)[0]);
         setTimeout(function () {
@@ -8646,7 +8650,7 @@ var WalkthroughComponent = (function () {
         this.walkthroughIcon = this.getIcon(this.walkthroughIconWanted);
         this.buttonCaption = this.buttonCaption || this.BUTTON_CAPTION_DONE;
         if (this.hasBackdrop === undefined) {
-            this.hasBackdrop = (this.walkthroughType !== "tip");
+            this.hasBackdrop = (this.walkthroughType !== 'tip');
         }
     };
     /**
@@ -8681,37 +8685,37 @@ var WalkthroughComponent = (function () {
      * @return {?}
      */
     function (icon) {
-        var /** @type {?} */ retval = "";
+        var /** @type {?} */ retval = '';
         switch (icon) {
-            case ("single_tap"):
+            case ('single_tap'):
                 retval = this.single_tap;
                 break;
-            case ("double_tap"):
+            case ('double_tap'):
                 retval = this.double_tap;
                 break;
-            case ("swipe_down"):
+            case ('swipe_down'):
                 retval = this.swipe_down;
                 break;
-            case ("swipe_left"):
+            case ('swipe_left'):
                 retval = this.swipe_left;
                 break;
-            case ("swipe_right"):
+            case ('swipe_right'):
                 retval = this.swipe_right;
                 break;
-            case ("swipe_up"):
+            case ('swipe_up'):
                 retval = this.swipe_up;
                 break;
-            case ("arrow"):
-                retval = ""; //Return nothing, using other dom element for arrow
+            case ('arrow'):
+                retval = ''; //Return nothing, using other dom element for arrow
                 break;
         }
-        if (retval === "" && icon && icon.length > 0) {
+        if (retval === '' && icon && icon.length > 0) {
             retval = icon;
         }
         else {
             this.toDataURL(retval).then(function (dataUrl) {
                 retval = dataUrl;
-                console.log("icon :", retval);
+                console.log('icon :', retval);
             });
         }
         return retval;
@@ -8777,7 +8781,7 @@ var WalkthroughComponent = (function () {
         var /** @type {?} */ endLeft = 0;
         var /** @type {?} */ isLine = false;
         if (Math.abs(startLeft - (pointSubjectLeft + pointSubjectWidth / 2)) < 10) {
-            console.warn("Hole element and text are inline line arrow will be used");
+            console.warn('Hole element and text are inline line arrow will be used');
             endLeft = pointSubjectLeft + pointSubjectWidth / 2;
             isLine = true;
         }
@@ -8803,9 +8807,9 @@ var WalkthroughComponent = (function () {
         arrowTop = (startTop < endTop) ? startTop : endTop;
         arrowBottom = (startTop < endTop) ? endTop : startTop;
         if (this.forceCaptionLocation === undefined && this.isItemOnText(arrowLeft, arrowTop, arrowRight, arrowBottom)) {
-            this.forceCaptionLocation = "BOTTOM";
+            this.forceCaptionLocation = 'BOTTOM';
         }
-        if (this.forceCaptionLocation === "BOTTOM") {
+        if (this.forceCaptionLocation === 'BOTTOM') {
             if (isLine) {
                 endTop = pointSubjectTop + pointSubjectHeight + this.PADDING_ARROW_MARKER;
             }
@@ -8844,7 +8848,7 @@ var WalkthroughComponent = (function () {
         if (arrowElement.children.length > 0) {
             arrowElement.children[0].remove();
         }
-        arrowElement.insertAdjacentHTML("afterbegin", arrowSvgDom);
+        arrowElement.insertAdjacentHTML('afterbegin', arrowSvgDom);
     };
     /**
      * Check if given icon covers text or if the text cover the hole
@@ -8986,14 +8990,13 @@ var WalkthroughComponent = (function () {
         var /** @type {?} */ iconBottom = iconTopWithPadding + iconHeight;
         //Check if text overlaps icon or user explicitly wants text at bottom, if does, move it to bottom
         if (this.forceCaptionLocation === undefined && this.isItemOnText(iconLeftWithPadding, iconTopWithPadding, iconRight, iconBottom)) {
-            this.forceCaptionLocation = "BOTTOM";
+            this.forceCaptionLocation = 'BOTTOM';
         }
-        var /** @type {?} */ iconLocation = "position: absolute;" +
-            "left:" + iconLeftWithPadding + "px;" +
-            "top:" + iconTopWithPadding + "px;";
+        var /** @type {?} */ iconLocation = 'position: absolute;' +
+            'left:' + iconLeftWithPadding + 'px;' +
+            'top:' + iconTopWithPadding + 'px;';
         this.walkthroughIconElement.setAttribute('style', iconLocation);
     };
-    
     /**
      * Attempts to highlight the given element ID and set Icon to it if exists, if not use default - right under text
      */
@@ -9007,19 +9010,19 @@ var WalkthroughComponent = (function () {
      */
     function () {
         var _this = this;
-        var /** @type {?} */ focusElement = (this.focusElementSelector) ? document.querySelectorAll(this.focusElementSelector) : null;
-        if (focusElement && focusElement.length > 0) {
-            if (focusElement.length > 1) {
+        var /** @type {?} */ selectorElements = (this.focusElementSelector) ? document.querySelectorAll(this.focusElementSelector) : null;
+        if (selectorElements && selectorElements.length > 0) {
+            if (selectorElements.length > 1) {
                 console.warn('Multiple items fit selector, displaying first visible as focus item');
             }
         }
         else {
             console.error('No element found with selector: ' + this.focusElementSelector);
-            focusElement = null;
+            selectorElements = null;
         }
         var /** @type {?} */ htmlElement = null;
-        if (focusElement) {
-            htmlElement = /** @type {?} */ (focusElement[0]);
+        if (selectorElements) {
+            htmlElement = /** @type {?} */ (selectorElements[0]);
         }
         if (htmlElement) {
             var /** @type {?} */ offsetCoordinates = this.getOffsetCoordinates(htmlElement);
@@ -9036,20 +9039,20 @@ var WalkthroughComponent = (function () {
             if (!paddingTop_1) {
                 paddingTop_1 = 0;
             }
-            //If Gesture icon given bind it to hole as well
-            if (this.walkthroughIconWanted && this.walkthroughIconWanted !== "arrow" && this.walkthroughType === "transparency") {
+            // If Gesture icon given bind it to hole as well
+            if (this.walkthroughIconWanted && this.walkthroughIconWanted !== 'arrow' && this.walkthroughType === 'transparency') {
                 setTimeout(function () {
                     _this.setIconAndText(left_1 + width_1 / 2, top_1 + height_1 / 2, paddingLeft_1, paddingTop_1);
                 }, 200);
             }
-            if (this.walkthroughIconWanted === "arrow") {
-                //Need to update text location according to conditional class added 'walkthrough-transparency-bottom'
+            if (this.walkthroughIconWanted === 'arrow') {
+                // Need to update text location according to conditional class added 'walkthrough-transparency-bottom'
                 setTimeout(function () {
                     _this.setArrowAndText(left_1, top_1 + paddingTop_1, width_1, height_1, paddingLeft_1);
                 }, 200);
             }
-            //if tip mode with icon that we want to set padding to, set it
-            if (this.walkthroughType === "tip" &&
+            // if tip mode with icon that we want to set padding to, set it
+            if (this.walkthroughType === 'tip' &&
                 this.walkthroughIconWanted && this.walkthroughIconWanted.length > 0 &&
                 (this.iconPaddingLeft || this.iconPaddingTop)) {
                 this.setTipIconPadding(this.iconPaddingLeft, this.iconPaddingTop);
@@ -9060,12 +9063,19 @@ var WalkthroughComponent = (function () {
                 console.info('Unable to find element requested to be focused: ' + this.focusElementSelector);
             }
             else {
-                //if tip mode with icon that we want to set padding to, set it
-                if (this.walkthroughType === "tip" &&
+                // if tip mode with icon that we want to set padding to, set it
+                if (this.walkthroughType === 'tip' &&
                     this.walkthroughIconWanted && this.walkthroughIconWanted.length > 0 &&
                     (this.iconPaddingLeft || this.iconPaddingTop)) {
                     this.setTipIconPadding(this.iconPaddingLeft, this.iconPaddingTop);
                 }
+            }
+        }
+        if (this.focusElementInteractive && selectorElements) {
+            for (var /** @type {?} */ i = 0; i < selectorElements.length; ++i) {
+                var /** @type {?} */ selectorElement = /** @type {?} */ (selectorElements.item(i));
+                this._focusElementZindexes[i] = (selectorElement.style.zIndex) ? selectorElement.style.zIndex : ZINDEX_NOT_SET;
+                selectorElement.style.zIndex = '99999';
             }
         }
     };
@@ -9093,10 +9103,10 @@ var WalkthroughComponent = (function () {
      * @return {?}
      */
     function (left, top, width, height) {
-        var /** @type {?} */ holeDimensions = "left:" + (left - this.PADDING_HOLE) + "px;" +
-            "top:" + (top - this.PADDING_HOLE) + "px;" +
-            "width:" + (width + (2 * this.PADDING_HOLE)) + "px;" +
-            "height:" + (height + (2 * this.PADDING_HOLE)) + "px;";
+        var /** @type {?} */ holeDimensions = 'left:' + (left - this.PADDING_HOLE) + 'px;' +
+            'top:' + (top - this.PADDING_HOLE) + 'px;' +
+            'width:' + (width + (2 * this.PADDING_HOLE)) + 'px;' +
+            'height:' + (height + (2 * this.PADDING_HOLE)) + 'px;';
         if (this.walkthroughHoleElements) {
             this.walkthroughHoleElements.setAttribute('style', holeDimensions);
         }
@@ -9148,16 +9158,15 @@ var WalkthroughComponent = (function () {
      * @return {?}
      */
     function (iconPaddingLeft, iconPaddingTop) {
-        var /** @type {?} */ iconLocation = "";
+        var /** @type {?} */ iconLocation = '';
         if (iconPaddingTop) {
-            iconLocation += "margin-top:" + iconPaddingTop + "px;";
+            iconLocation += 'margin-top:' + iconPaddingTop + 'px;';
         }
         if (iconPaddingLeft) {
-            iconLocation += "right:" + iconPaddingLeft + "%;";
+            iconLocation += 'right:' + iconPaddingLeft + '%;';
         }
         this.walkthroughIconElement.setAttribute('style', iconLocation);
     };
-    
     /**
      * Close the walkthrough
      * @param event
@@ -9197,41 +9206,56 @@ var WalkthroughComponent = (function () {
             arrowElement.children[0].remove();
         }
         this.isVisible = false;
+        // reset z-index on selectedElement
+        var /** @type {?} */ selectedElements = (this.focusElementSelector) ? document.querySelectorAll(this.focusElementSelector) : null;
+        if (selectedElements) {
+            for (var /** @type {?} */ i = 0; i < selectedElements.length; ++i) {
+                var /** @type {?} */ curElement = /** @type {?} */ (selectedElements.item(i));
+                if (this._focusElementZindexes[i] !== ZINDEX_NOT_SET) {
+                    curElement.style.zIndex = this._focusElementZindexes[i];
+                }
+                else {
+                    curElement.style.zIndex = null;
+                    delete curElement.style.zIndex;
+                }
+            }
+            this._focusElementZindexes = [];
+        }
     };
-    
     WalkthroughComponent.decorators = [
         { type: core.Component, args: [{
                     selector: 'walkthrough',
                     template: "\n  <div #walkthroughcomponent class=\"{{DOM_WALKTHROUGH_CLASS}}\" [hidden]=\"!isVisible\" [ngClass]=\"{'walkthrough-active': isVisible}\" (click)=\"onCloseClicked($event)\">\n  <div class=\"walkthrough-container walkthrough-container-transparency\" [hidden]=\"walkthroughType!=='transparency'\">\n    <div class=\"walkthrough-inner\">\n      <div class=\"{{DOM_TRANSCLUDE}}\">\n        <ng-content select=\"img\"></ng-content>\n      </div>\n      <div class=\"walkthrough-non-transclude-template\" [hidden]=\"hasTransclude\">\n        <div class=\"walkthrough-text-container\" [ngClass]=\"{'walkthrough-top': (!forceCaptionLocation || forceCaptionLocation==='TOP'), 'walkthrough-bottom': forceCaptionLocation==='BOTTOM'}\">\n          <pre class=\"walkthrough-element walkthrough-text\" [innerHTML]=\"mainCaption\"></pre>\n          <img *ngIf=\"walkthroughHeroImage\" class=\"walkthrough-element walkthrough-hero-image\" src=\"{{walkthroughHeroImage}}\" (click)=\"onWalkthroughContentClicked()\">\n        </div>\n        <img class=\"walkthrough-element walkthrough-icon\" [hidden]=\"walkthroughIconWanted && walkthroughIconWanted==='arrow'\" src=\"{{walkthroughIcon}}\">\n        <div class=\"walkthrough-element walkthrough-arrow\" [hidden]=\"walkthroughIconWanted!=='arrow'\"></div>\n        <button class=\"walkthrough-element walkthrough-button-positive walkthrough-done-button\" type=\"button\" *ngIf=\"useButton\" (click)=\"onCloseClicked($event)\">\n          {{buttonCaption}}\n        </button>\n      </div>\n    </div>\n  </div>\n  <div class=\"walkthrough-container walkthrough-container-tip\" [hidden]=\"walkthroughType!=='tip'\">\n    <div class=\"walkthrough-inner\" [ngClass]=\"{'walkthrough-top': ((!forceCaptionLocation && !tipLocation) || forceCaptionLocation==='TOP' || tipLocation =='TOP'), 'walkthrough-bottom': (forceCaptionLocation=='BOTTOM' || tipLocation =='BOTTOM')}\">\n      <img class=\"walkthrough-element walkthrough-tip-icon-text-box\" [ngClass]=\"{'walkthrough-tip-icon-image-front': tipIconLocation==='FRONT', 'walkthrough-tip-icon-image-back': tipIconLocation=='BACK'}\"\n        [hidden]=\"walkthroughIconWanted && walkthroughIconWanted==='arrow'\" src=\"{{walkthroughIcon}}\" alt=\"icon\">\n      <button class=\"walkthrough-done-button walkthrough-tip-done-button-text-box\" [ngClass]=\"{'walkthrough-tip-done-button-no-icon': !icon}\"\n        type=\"button\" *ngIf=\"useButton\" (click)=\"onCloseClicked($event)\">\n        <img class=\"walkthrough-tip-button-image-text-box\" src=\"{{closeIcon}}\" alt=\"x\">\n      </button>\n      <div class=\"walkthrough-element walkthrough-tip-text-box\" (click)=\"onWalkthroughContentClicked()\" [ngClass]=\"{'walkthrough-tip-text-box-color-black': tipColor=='BLACK', 'walkthrough-tip-text-box-color-white': tipColor=='WHITE'}\">\n        <pre [innerHTML]=\"mainCaption\"></pre>\n        <img *ngIf=\"walkthroughHeroImage\" class=\"walkthrough-element walkthrough-hero-image\" src=\"{{walkthroughHeroImage}}\">\n        <div class=\"{{DOM_TRANSCLUDE}}\">\n          <ng-content select=\"img\"></ng-content>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div [hidden]=\"!hasBackdrop\" class=\"walkthrough-hole\" [ngClass]=\"{'walkthrough-hole-round': isRound}\">\n  </div>\n  <div [hidden]=\"!(hasGlow && (focusElementSelector))\" class=\"walkthrough-hole walkthrough-hole-glow\" [ngClass]=\"{'walkthrough-hole-round': isRound}\">\n  </div>\n</div>\n",
                     styles: [
-                        "\n  .walkthrough-hole-glow {\n      position: absolute;\n      outline: none;\n      border: 2px solid #FFFF66 !important;\n      box-shadow: 0 0 36px #FFFF66 !important;\n      -webkit-appearance: none;\n      box-sizing: border-box;\n  }\n\n  .walkthrough-background {\n      position: absolute;\n      top: 0;\n      bottom: 0;\n      left: 0;\n      right: 0;\n      background-color: initial;\n      text-align: center;\n      -webkit-transition: height 0s ease-out .2s, opacity .2s ease-out;\n      -moz-transition: height 0s ease-out .2s, opacity .2s ease-out;\n      -o-transition: height 0s ease-out .2s, opacity .2s ease-out;\n      transition: height 0s ease-out .2s, opacity .2s ease-out;\n      opacity: 0;\n      height: 0;\n      overflow: hidden;\n      z-index: 1000;\n  }\n\n  .walkthrough-hole {\n      position: absolute;\n      -moz-box-shadow: 0 0 0 1997px rgba(0, 0, 0, 0.8);\n      -webkit-box-shadow: 0 0 0 1997px rgba(0, 0, 0, 0.8);\n      box-shadow: 0 0 0 1997px rgba(0, 0, 0, 0.8);\n      -webkit-appearance: none;\n  }\n\n  .walkthrough-element.walkthrough-text {\n      margin-top: 10%;\n      width: 50%;\n      color: #fff;\n      text-align: center;\n  }\n\n  .walkthrough-element.walkthrough-done-button {\n      position: absolute;\n      bottom: 30px;\n      height: 30px;\n      width: 80px;\n      display: inline-block;\n      right: 30px;\n      margin: 0 auto;\n  }\n\n  .walkthrough-button-positive {\n      border-color: #0c63ee;\n      background-color: #387ef5;\n      color: #fff;\n  }\n\n  .walkthrough-button-positive:hover {\n      color: #fff;\n      text-decoration: none;\n  }\n\n  .walkthrough-button-positive.active {\n      border-color: #0c63ee;\n      background-color: #0c63ee;\n      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);\n  }\n\n  .walkthrough-element.walkthrough-icon {\n      height: 200px;\n  }\n\n  .walkthrough-element.walkthrough-arrow {\n      color: #ffffff;\n      position: absolute;\n      top: 0;\n      left: 0;\n      right: 0;\n      bottom: 0;\n  }\n\n  .walkthrough-element {\n      z-index: 1001;\n      position: relative;\n      margin-left: auto;\n      margin-right: auto;\n  }\n\n  .walkthrough-background.walkthrough-active {\n      -webkit-transition: opacity .2s ease-out;\n      -moz-transition: opacity .2s ease-out;\n      -o-transition: opacity .2s ease-out;\n      transition: opacity .2s ease-out;\n      opacity: 1;\n      height: 100%;\n      pointer-events: all;\n  }\n\n  .walkthrough-transclude {\n      position: relative;\n      z-index: 2;\n      width: 100%;\n      height: 100%;\n  }\n\n  .walkthrough-hole-round {\n      border-radius: 200px;\n  }\n\n  .walkthrough-tip-text-box {\n      /*top: 128px;*/\n      position: relative;\n      margin-left: 16px;\n      margin-right: 16px;\n      border: 2px solid;\n      border-radius: 35px;\n      padding: 14px;\n      word-break: break-all !important;\n\n      /*margin-top: 0;*/\n      /*margin-bottom: 0;*/\n  }\n\n  .walkthrough-container {\n      float: left;\n      position: relative;\n      height: 100%;\n      width: 100%;\n  }\n\n  .walkthrough-inner {\n      z-index: 3;\n      width: 100%;\n  }\n\n  .walkthrough-container-transparency > .walkthrough-inner {\n      height: 100%;\n  }\n\n  .walkthrough-text-container {\n      position: absolute;\n      width: 100%;\n  }\n\n  .walkthrough-container-tip .walkthrough-top, .walkthrough-container-transparency .walkthrough-top {\n      top: 15px;\n  }\n\n  .walkthrough-container-tip .walkthrough-bottom {\n      bottom: 0;\n  }\n\n  /* take 'done' button into consideration */\n  .walkthrough-container-transparency .walkthrough-bottom {\n      bottom: 70px;\n  }\n\n  .walkthrough-tip-icon-image-front {\n      z-index: 1002;\n  }\n\n  .walkthrough-tip-icon-image-back {\n      z-index: 999;\n  }\n\n  .walkthrough-tip-icon-text-box {\n      height: 142px;\n\n      /*right: 9%;*/\n      position: relative;\n      margin-bottom: -32px;\n      margin-right: -250px;\n\n      /*bottom: 70px;*/\n  }\n\n  .walkthrough-tip-done-button-text-box {\n      /*top: 109px;*/\n      /*bottom: 59px;*/\n      position: relative;\n      z-index: 1002;\n\n      /*right: -7px;*/\n      margin-top: 107px;\n      background-color: transparent;\n      border: 0;\n      float: right;\n  }\n\n  .walkthrough-tip-done-button-no-icon {\n      margin-top: -13px !important;\n  }\n\n  .walkthrough-tip-button-image-text-box {\n      width: 42px;\n      height: 42px;\n  }\n\n  .walkthrough-tip-text-box-color-black {\n      border-color: #ffffff;\n      background-color: #000000;\n      color: #ffffff;\n  }\n\n  .walkthrough-tip-text-box-color-white {\n      border-color: #000000;\n      background-color: #ffffff;\n  }\n\n  .walkthrough-hero-image {\n      margin-top: 15px;\n  }\n\n  .walkthrough-transclude img {\n      height: 100vh;\n      width: 100%;\n  }\n\n  pre {\n      white-space: pre-wrap;\n  }\n  "
+                        "\n  .walkthrough-hole-glow {\n      position: absolute;\n      outline: none;\n      border: 2px solid #FFFF66 !important;\n      box-shadow: 0 0 36px #FFFF66 !important;\n      -webkit-appearance: none;\n      box-sizing: border-box;\n  }\n\n  .walkthrough-background {\n      position: absolute;\n      top: 0;\n      bottom: 0;\n      left: 0;\n      right: 0;\n      background-color: initial;\n      text-align: center;\n      -webkit-transition: height 0s ease-out .2s, opacity .2s ease-out;\n      -moz-transition: height 0s ease-out .2s, opacity .2s ease-out;\n      -o-transition: height 0s ease-out .2s, opacity .2s ease-out;\n      transition: height 0s ease-out .2s, opacity .2s ease-out;\n      opacity: 0;\n      height: 0;\n      overflow: hidden;\n      z-index: 1000;\n  }\n\n  .walkthrough-hole {\n      position: absolute;\n      -moz-box-shadow: 0 0 0 1997px rgba(0, 0, 0, 0.8);\n      -webkit-box-shadow: 0 0 0 1997px rgba(0, 0, 0, 0.8);\n      box-shadow: 0 0 0 1997px rgba(0, 0, 0, 0.8);\n      -webkit-appearance: none;\n  }\n\n  .walkthrough-element.walkthrough-text {\n      margin-top: 10%;\n      width: 50%;\n      color: #fff;\n      text-align: center;\n  }\n\n  .walkthrough-element.walkthrough-done-button {\n      position: absolute;\n      bottom: 30px;\n      height: 30px;\n      width: 80px;\n      display: inline-block;\n      right: 30px;\n      margin: 0 auto;\n  }\n\n  .walkthrough-button-positive {\n      border-color: #0c63ee;\n      background-color: #387ef5;\n      color: #fff;\n  }\n\n  .walkthrough-button-positive:hover {\n      color: #fff;\n      text-decoration: none;\n  }\n\n  .walkthrough-button-positive.active {\n      border-color: #0c63ee;\n      background-color: #0c63ee;\n      box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);\n  }\n\n  .walkthrough-element.walkthrough-icon {\n      height: 200px;\n  }\n\n  .walkthrough-element.walkthrough-arrow {\n      color: #ffffff;\n      position: absolute;\n      top: 0;\n      left: 0;\n      right: 0;\n      bottom: 0;\n  }\n\n  .walkthrough-element {\n      z-index: 1001;\n      position: relative;\n      margin-left: auto;\n      margin-right: auto;\n  }\n\n  .walkthrough-background.walkthrough-active {\n      -webkit-transition: opacity .2s ease-out;\n      -moz-transition: opacity .2s ease-out;\n      -o-transition: opacity .2s ease-out;\n      transition: opacity .2s ease-out;\n      opacity: 1;\n      height: 100%;\n      pointer-events: all;\n  }\n\n  .walkthrough-transclude {\n      position: relative;\n      z-index: 2;\n      width: 100%;\n      height: 100%;\n  }\n\n  .walkthrough-hole-round {\n      border-radius: 200px;\n  }\n\n  .walkthrough-tip-text-box {\n      /*top: 128px;*/\n      position: relative;\n      margin-left: 16px;\n      margin-right: 16px;\n      border: 2px solid;\n      border-radius: 35px;\n      padding: 14px;\n      word-break: break-all !important;\n\n      /*margin-top: 0;*/\n      /*margin-bottom: 0;*/\n  }\n\n  .walkthrough-container {\n      float: left;\n      position: relative;\n      height: 100%;\n      width: 100%;\n  }\n\n  .walkthrough-inner {\n      z-index: 3;\n      width: 100%;\n  }\n\n  .walkthrough-container-transparency > .walkthrough-inner {\n      height: 100%;\n  }\n\n  .walkthrough-text-container {\n      position: absolute;\n      width: 100%;\n  }\n\n  .walkthrough-container-tip .walkthrough-top, .walkthrough-container-transparency .walkthrough-top {\n      top: 15px;\n  }\n\n  .walkthrough-container-tip .walkthrough-bottom {\n      bottom: 0;\n  }\n\n  /* take 'done' button into consideration */\n  .walkthrough-container-transparency .walkthrough-bottom {\n      bottom: 70px;\n  }\n\n  .walkthrough-tip-icon-image-front {\n      z-index: 1002;\n  }\n\n  .walkthrough-tip-icon-image-back {\n      z-index: 999;\n  }\n\n  .walkthrough-tip-icon-text-box {\n      height: 142px;\n\n      /*right: 9%;*/\n      position: relative;\n      margin-bottom: -32px;\n      margin-right: -250px;\n\n      /*bottom: 70px;*/\n  }\n  \n  .walkthrough-tip-done-button-text-box {\n      /*top: 109px;*/\n      /*bottom: 59px;*/\n      position: relative;\n      z-index: 1002;\n\n      /*right: -7px;*/\n      margin-top: 107px;\n      background-color: transparent;\n      border: 0;\n      float: right;\n  }\n\n  .walkthrough-tip-done-button-no-icon {\n      margin-top: -13px !important;\n  }\n\n  .walkthrough-tip-button-image-text-box {\n      width: 42px;\n      height: 42px;\n  }\n\n  .walkthrough-tip-text-box-color-black {\n      border-color: #ffffff;\n      background-color: #000000;\n      color: #ffffff;\n  }\n\n  .walkthrough-tip-text-box-color-white {\n      border-color: #000000;\n      background-color: #ffffff;\n  }\n\n  .walkthrough-hero-image {\n      margin-top: 15px;\n  }\n\n  .walkthrough-transclude img {\n      height: 100vh;\n      width: 100%;\n  }\n\n  pre {\n      white-space: pre-wrap;\n  }\n  "
                     ]
                 },] },
     ];
     /** @nocollapse */
     WalkthroughComponent.ctorParameters = function () { return []; };
     WalkthroughComponent.propDecorators = {
-        "walkthroughType": [{ type: core.Input, args: ["walkthrough-type",] },],
-        "buttonCaption": [{ type: core.Input, args: ["button-caption",] },],
-        "useButton": [{ type: core.Input, args: ["use-button",] },],
-        "mainCaption": [{ type: core.Input, args: ["main-caption",] },],
-        "walkthroughIconWanted": [{ type: core.Input, args: ["icon",] },],
-        "walkthroughHeroImage": [{ type: core.Input, args: ["walkthrough-hero-image",] },],
-        "hasGlow": [{ type: core.Input, args: ["has-glow",] },],
-        "forceCaptionLocation": [{ type: core.Input, args: ["force-caption-location",] },],
-        "hasBackdrop": [{ type: core.Input, args: ["has-backdrop",] },],
-        "isRound": [{ type: core.Input, args: ["is-round",] },],
-        "iconPaddingLeft": [{ type: core.Input, args: ["icon-padding-left",] },],
-        "iconPaddingTop": [{ type: core.Input, args: ["icon-padding-top",] },],
-        "tipIconLocation": [{ type: core.Input, args: ["tip-icon-location",] },],
-        "tipColor": [{ type: core.Input, args: ["tip-color",] },],
-        "focusElementSelector": [{ type: core.Input, args: ["focus-element-selector",] },],
-        "isActive": [{ type: core.Input, args: ["is-active",] },],
-        "onWalkthroughShowEvent": [{ type: core.Output, args: ["on-walkthrough-show",] },],
-        "onWalkthroughHideEvent": [{ type: core.Output, args: ["on-walkthrough-hide",] },],
-        "onWalkthroughContentClickedEvent": [{ type: core.Output, args: ["on-walkthrough-content-clicked",] },],
+        "walkthroughType": [{ type: core.Input, args: ['walkthrough-type',] },],
+        "buttonCaption": [{ type: core.Input, args: ['button-caption',] },],
+        "useButton": [{ type: core.Input, args: ['use-button',] },],
+        "mainCaption": [{ type: core.Input, args: ['main-caption',] },],
+        "walkthroughIconWanted": [{ type: core.Input, args: ['icon',] },],
+        "walkthroughHeroImage": [{ type: core.Input, args: ['walkthrough-hero-image',] },],
+        "hasGlow": [{ type: core.Input, args: ['has-glow',] },],
+        "forceCaptionLocation": [{ type: core.Input, args: ['force-caption-location',] },],
+        "hasBackdrop": [{ type: core.Input, args: ['has-backdrop',] },],
+        "isRound": [{ type: core.Input, args: ['is-round',] },],
+        "iconPaddingLeft": [{ type: core.Input, args: ['icon-padding-left',] },],
+        "iconPaddingTop": [{ type: core.Input, args: ['icon-padding-top',] },],
+        "tipIconLocation": [{ type: core.Input, args: ['tip-icon-location',] },],
+        "tipColor": [{ type: core.Input, args: ['tip-color',] },],
+        "focusElementSelector": [{ type: core.Input, args: ['focus-element-selector',] },],
+        "focusElementInteractive": [{ type: core.Input, args: ['focus-element-interactive',] },],
+        "isActive": [{ type: core.Input, args: ['is-active',] },],
+        "onWalkthroughShowEvent": [{ type: core.Output, args: ['on-walkthrough-show',] },],
+        "onWalkthroughHideEvent": [{ type: core.Output, args: ['on-walkthrough-hide',] },],
+        "onWalkthroughContentClickedEvent": [{ type: core.Output, args: ['on-walkthrough-content-clicked',] },],
         "onResize": [{ type: core.HostListener, args: ['window:resize', ['$event'],] },],
-        "element": [{ type: core.ViewChild, args: ["walkthroughcomponent",] },],
+        "element": [{ type: core.ViewChild, args: ['walkthroughcomponent',] },],
     };
     return WalkthroughComponent;
 }());
