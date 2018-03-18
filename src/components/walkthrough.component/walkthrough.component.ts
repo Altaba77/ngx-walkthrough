@@ -783,7 +783,7 @@ export class WalkthroughComponent implements AfterViewChecked {
     if (this.focusElementInteractive && selectorElements) {
       for (let i = 0; i < selectorElements.length; ++i) {
         const selectorElement: HTMLElement = selectorElements.item(i) as HTMLElement;
-        this._focusElementZindexes[i] = (this._focusElementZindexes[i] != '99999' && selectorElement.style.zIndex) ?
+        this._focusElementZindexes[i] = (selectorElement.style.zIndex !== '99999' && selectorElement.style.zIndex) ?
             selectorElement.style.zIndex :
             ZINDEX_NOT_SET;
         selectorElement.style.zIndex = '99999';
