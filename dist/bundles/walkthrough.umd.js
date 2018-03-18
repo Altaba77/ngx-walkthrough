@@ -9007,19 +9007,19 @@ var WalkthroughComponent = (function () {
      */
     function () {
         var _this = this;
-        var /** @type {?} */ focusElement = (this.focusElementSelector) ? document.querySelectorAll(this.focusElementSelector) : null;
-        if (focusElement && focusElement.length > 0) {
-            if (focusElement.length > 1) {
+        var /** @type {?} */ selectorElements = (this.focusElementSelector) ? document.querySelectorAll(this.focusElementSelector) : null;
+        if (selectorElements && selectorElements.length > 0) {
+            if (selectorElements.length > 1) {
                 console.warn('Multiple items fit selector, displaying first visible as focus item');
             }
         }
         else {
             console.error('No element found with selector: ' + this.focusElementSelector);
-            focusElement = null;
+            selectorElements = null;
         }
         var /** @type {?} */ htmlElement = null;
-        if (focusElement) {
-            htmlElement = /** @type {?} */ (focusElement[0]);
+        if (selectorElements) {
+            htmlElement = /** @type {?} */ (selectorElements[0]);
         }
         if (htmlElement) {
             var /** @type {?} */ offsetCoordinates = this.getOffsetCoordinates(htmlElement);
@@ -9036,19 +9036,19 @@ var WalkthroughComponent = (function () {
             if (!paddingTop_1) {
                 paddingTop_1 = 0;
             }
-            //If Gesture icon given bind it to hole as well
+            // If Gesture icon given bind it to hole as well
             if (this.walkthroughIconWanted && this.walkthroughIconWanted !== "arrow" && this.walkthroughType === "transparency") {
                 setTimeout(function () {
                     _this.setIconAndText(left_1 + width_1 / 2, top_1 + height_1 / 2, paddingLeft_1, paddingTop_1);
                 }, 200);
             }
             if (this.walkthroughIconWanted === "arrow") {
-                //Need to update text location according to conditional class added 'walkthrough-transparency-bottom'
+                // Need to update text location according to conditional class added 'walkthrough-transparency-bottom'
                 setTimeout(function () {
                     _this.setArrowAndText(left_1, top_1 + paddingTop_1, width_1, height_1, paddingLeft_1);
                 }, 200);
             }
-            //if tip mode with icon that we want to set padding to, set it
+            // if tip mode with icon that we want to set padding to, set it
             if (this.walkthroughType === "tip" &&
                 this.walkthroughIconWanted && this.walkthroughIconWanted.length > 0 &&
                 (this.iconPaddingLeft || this.iconPaddingTop)) {
@@ -9060,12 +9060,18 @@ var WalkthroughComponent = (function () {
                 console.info('Unable to find element requested to be focused: ' + this.focusElementSelector);
             }
             else {
-                //if tip mode with icon that we want to set padding to, set it
+                // if tip mode with icon that we want to set padding to, set it
                 if (this.walkthroughType === "tip" &&
                     this.walkthroughIconWanted && this.walkthroughIconWanted.length > 0 &&
                     (this.iconPaddingLeft || this.iconPaddingTop)) {
                     this.setTipIconPadding(this.iconPaddingLeft, this.iconPaddingTop);
                 }
+            }
+        }
+        if (this.focusElementInteractive && selectorElements) {
+            for (var /** @type {?} */ i = 0; i < selectorElements.length; ++i) {
+                var /** @type {?} */ selectorElement = /** @type {?} */ (selectorElements.item(i));
+                selectorElement.classList.add("walkthrough-top-item");
             }
         }
     };
@@ -9226,6 +9232,7 @@ var WalkthroughComponent = (function () {
         "tipIconLocation": [{ type: core.Input, args: ["tip-icon-location",] },],
         "tipColor": [{ type: core.Input, args: ["tip-color",] },],
         "focusElementSelector": [{ type: core.Input, args: ["focus-element-selector",] },],
+        "focusElementInteractive": [{ type: core.Input, args: ["focus-element-interactive",] },],
         "isActive": [{ type: core.Input, args: ["is-active",] },],
         "onWalkthroughShowEvent": [{ type: core.Output, args: ["on-walkthrough-show",] },],
         "onWalkthroughHideEvent": [{ type: core.Output, args: ["on-walkthrough-hide",] },],

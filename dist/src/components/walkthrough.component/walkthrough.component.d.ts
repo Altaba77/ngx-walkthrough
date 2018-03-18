@@ -17,6 +17,7 @@ export declare class WalkthroughComponent implements AfterViewChecked {
     tipColor: string;
     private _focusElementSelector;
     focusElementSelector: string;
+    focusElementInteractive: boolean;
     isActive: boolean;
     onWalkthroughShowEvent: EventEmitter<void>;
     onWalkthroughHideEvent: EventEmitter<void>;

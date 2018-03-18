@@ -310,6 +310,9 @@ export class WalkthroughComponent implements AfterViewChecked {
     }
   }
 
+  @Input("focus-element-interactive") focusElementInteractive: boolean;
+
+
 
   @Input("is-active")
   set isActive(isActive: boolean) {
@@ -708,28 +711,28 @@ export class WalkthroughComponent implements AfterViewChecked {
    * Attempts to highlight the given element ID and set Icon to it if exists, if not use default - right under text
    */
   setElementLocations() {
-    let focusElement = (this.focusElementSelector) ? document.querySelectorAll(this.focusElementSelector) : null;
-    if (focusElement && focusElement.length > 0) {
-      if (focusElement.length > 1) {
+    let selectorElements = (this.focusElementSelector) ? document.querySelectorAll(this.focusElementSelector) : null;
+    if (selectorElements && selectorElements.length > 0) {
+      if (selectorElements.length > 1) {
         console.warn('Multiple items fit selector, displaying first visible as focus item');
-
       }
+
 
     }
     else {
       console.error('No element found with selector: ' + this.focusElementSelector);
-      focusElement = null;
+      selectorElements = null;
     }
     let htmlElement = null;
-    if (focusElement) {
-      htmlElement = focusElement[0] as HTMLElement;
+    if (selectorElements) {
+      htmlElement = selectorElements[0] as HTMLElement;
     }
     if (htmlElement) {
       let offsetCoordinates = this.getOffsetCoordinates(htmlElement);
-      let width = offsetCoordinates.width;
-      let height = offsetCoordinates.height;
-      let left = offsetCoordinates.left;
-      let top = offsetCoordinates.top;
+      const width = offsetCoordinates.width;
+      const height = offsetCoordinates.height;
+      const left = offsetCoordinates.left;
+      const top = offsetCoordinates.top;
 
       this.setFocus(left, top, width, height);
       let paddingLeft = parseFloat(this.iconPaddingLeft);
@@ -737,19 +740,19 @@ export class WalkthroughComponent implements AfterViewChecked {
       if (!paddingLeft) { paddingLeft = 0; }
       if (!paddingTop) { paddingTop = 0; }
 
-      //If Gesture icon given bind it to hole as well
+      // If Gesture icon given bind it to hole as well
       if (this.walkthroughIconWanted && this.walkthroughIconWanted !== "arrow" && this.walkthroughType === "transparency") {
         setTimeout(() => {
           this.setIconAndText(left + width / 2, top + height / 2, paddingLeft, paddingTop);
         }, 200);
       }
       if (this.walkthroughIconWanted === "arrow") {
-        //Need to update text location according to conditional class added 'walkthrough-transparency-bottom'
+        // Need to update text location according to conditional class added 'walkthrough-transparency-bottom'
         setTimeout(() => {
           this.setArrowAndText(left, top + paddingTop, width, height, paddingLeft);
         }, 200);
       }
-      //if tip mode with icon that we want to set padding to, set it
+      // if tip mode with icon that we want to set padding to, set it
       if (this.walkthroughType === "tip" &&
         this.walkthroughIconWanted && this.walkthroughIconWanted.length > 0 &&
         (this.iconPaddingLeft || this.iconPaddingTop)) {
@@ -759,13 +762,21 @@ export class WalkthroughComponent implements AfterViewChecked {
       if (this.focusElementSelector) {
         console.info('Unable to find element requested to be focused: ' + this.focusElementSelector);
       } else {
-        //if tip mode with icon that we want to set padding to, set it
+        // if tip mode with icon that we want to set padding to, set it
         if (this.walkthroughType === "tip" &&
           this.walkthroughIconWanted && this.walkthroughIconWanted.length > 0 &&
           (this.iconPaddingLeft || this.iconPaddingTop)) {
           this.setTipIconPadding(this.iconPaddingLeft, this.iconPaddingTop);
         }
       }
+    }
+
+    if (this.focusElementInteractive && selectorElements) {
+      for (let i = 0; i < selectorElements.length; ++i) {
+        const selectorElement: HTMLElement = selectorElements.item(i) as HTMLElement;
+        selectorElement.classList.add("walkthrough-top-item");
+      }
+
     }
   }
 

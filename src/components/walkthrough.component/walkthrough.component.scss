@@ -222,4 +222,8 @@ walkthrough {
     pre {
         white-space: pre-wrap;
     }
+
+    .walkthrough-top-item {
+        z-index: 99999!important;
+    }
 }

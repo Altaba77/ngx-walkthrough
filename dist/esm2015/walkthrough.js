@@ -3953,26 +3953,26 @@ class WalkthroughComponent {
      * @return {?}
      */
     setElementLocations() {
-        let /** @type {?} */ focusElement = (this.focusElementSelector) ? document.querySelectorAll(this.focusElementSelector) : null;
-        if (focusElement && focusElement.length > 0) {
-            if (focusElement.length > 1) {
+        let /** @type {?} */ selectorElements = (this.focusElementSelector) ? document.querySelectorAll(this.focusElementSelector) : null;
+        if (selectorElements && selectorElements.length > 0) {
+            if (selectorElements.length > 1) {
                 console.warn('Multiple items fit selector, displaying first visible as focus item');
             }
         }
         else {
             console.error('No element found with selector: ' + this.focusElementSelector);
-            focusElement = null;
+            selectorElements = null;
         }
         let /** @type {?} */ htmlElement = null;
-        if (focusElement) {
-            htmlElement = /** @type {?} */ (focusElement[0]);
+        if (selectorElements) {
+            htmlElement = /** @type {?} */ (selectorElements[0]);
         }
         if (htmlElement) {
             let /** @type {?} */ offsetCoordinates = this.getOffsetCoordinates(htmlElement);
-            let /** @type {?} */ width = offsetCoordinates.width;
-            let /** @type {?} */ height = offsetCoordinates.height;
-            let /** @type {?} */ left = offsetCoordinates.left;
-            let /** @type {?} */ top = offsetCoordinates.top;
+            const /** @type {?} */ width = offsetCoordinates.width;
+            const /** @type {?} */ height = offsetCoordinates.height;
+            const /** @type {?} */ left = offsetCoordinates.left;
+            const /** @type {?} */ top = offsetCoordinates.top;
             this.setFocus(left, top, width, height);
             let /** @type {?} */ paddingLeft = parseFloat(this.iconPaddingLeft);
             let /** @type {?} */ paddingTop = parseFloat(this.iconPaddingTop);
@@ -3982,19 +3982,19 @@ class WalkthroughComponent {
             if (!paddingTop) {
                 paddingTop = 0;
             }
-            //If Gesture icon given bind it to hole as well
+            // If Gesture icon given bind it to hole as well
             if (this.walkthroughIconWanted && this.walkthroughIconWanted !== "arrow" && this.walkthroughType === "transparency") {
                 setTimeout(() => {
                     this.setIconAndText(left + width / 2, top + height / 2, paddingLeft, paddingTop);
                 }, 200);
             }
             if (this.walkthroughIconWanted === "arrow") {
-                //Need to update text location according to conditional class added 'walkthrough-transparency-bottom'
+                // Need to update text location according to conditional class added 'walkthrough-transparency-bottom'
                 setTimeout(() => {
                     this.setArrowAndText(left, top + paddingTop, width, height, paddingLeft);
                 }, 200);
             }
-            //if tip mode with icon that we want to set padding to, set it
+            // if tip mode with icon that we want to set padding to, set it
             if (this.walkthroughType === "tip" &&
                 this.walkthroughIconWanted && this.walkthroughIconWanted.length > 0 &&
                 (this.iconPaddingLeft || this.iconPaddingTop)) {
@@ -4006,12 +4006,18 @@ class WalkthroughComponent {
                 console.info('Unable to find element requested to be focused: ' + this.focusElementSelector);
             }
             else {
-                //if tip mode with icon that we want to set padding to, set it
+                // if tip mode with icon that we want to set padding to, set it
                 if (this.walkthroughType === "tip" &&
                     this.walkthroughIconWanted && this.walkthroughIconWanted.length > 0 &&
                     (this.iconPaddingLeft || this.iconPaddingTop)) {
                     this.setTipIconPadding(this.iconPaddingLeft, this.iconPaddingTop);
                 }
+            }
+        }
+        if (this.focusElementInteractive && selectorElements) {
+            for (let /** @type {?} */ i = 0; i < selectorElements.length; ++i) {
+                const /** @type {?} */ selectorElement = /** @type {?} */ (selectorElements.item(i));
+                selectorElement.classList.add("walkthrough-top-item");
             }
         }
     }
@@ -4382,6 +4388,7 @@ WalkthroughComponent.propDecorators = {
     "tipIconLocation": [{ type: Input, args: ["tip-icon-location",] },],
     "tipColor": [{ type: Input, args: ["tip-color",] },],
     "focusElementSelector": [{ type: Input, args: ["focus-element-selector",] },],
+    "focusElementInteractive": [{ type: Input, args: ["focus-element-interactive",] },],
     "isActive": [{ type: Input, args: ["is-active",] },],
     "onWalkthroughShowEvent": [{ type: Output, args: ["on-walkthrough-show",] },],
     "onWalkthroughHideEvent": [{ type: Output, args: ["on-walkthrough-hide",] },],
