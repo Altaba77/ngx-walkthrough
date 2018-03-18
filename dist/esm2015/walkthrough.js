@@ -3571,6 +3571,7 @@ class WalkthroughComponent {
         this.useButton = false;
         this.hasGlow = false;
         this.isRound = false;
+        this.focusElementInteractive = false;
         this.onWalkthroughShowEvent = new EventEmitter();
         this.onWalkthroughHideEvent = new EventEmitter();
         this.onWalkthroughContentClickedEvent = new EventEmitter();
@@ -4017,7 +4018,7 @@ class WalkthroughComponent {
         if (this.focusElementInteractive && selectorElements) {
             for (let /** @type {?} */ i = 0; i < selectorElements.length; ++i) {
                 const /** @type {?} */ selectorElement = /** @type {?} */ (selectorElements.item(i));
-                selectorElement.classList.add("walkthrough-top-item");
+                selectorElement.style.zIndex = '99999';
             }
         }
     }
@@ -4388,7 +4389,7 @@ WalkthroughComponent.propDecorators = {
     "tipIconLocation": [{ type: Input, args: ["tip-icon-location",] },],
     "tipColor": [{ type: Input, args: ["tip-color",] },],
     "focusElementSelector": [{ type: Input, args: ["focus-element-selector",] },],
-    "focusElementInteractive": [{ type: Input, args: ["focus-element-interactive",] },],
+    "focusElementInteractive": [{ type: Input, args: ['focus-element-interactive',] },],
     "isActive": [{ type: Input, args: ["is-active",] },],
     "onWalkthroughShowEvent": [{ type: Output, args: ["on-walkthrough-show",] },],
     "onWalkthroughHideEvent": [{ type: Output, args: ["on-walkthrough-hide",] },],

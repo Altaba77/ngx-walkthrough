@@ -8503,6 +8503,7 @@ var WalkthroughComponent = (function () {
         this.useButton = false;
         this.hasGlow = false;
         this.isRound = false;
+        this.focusElementInteractive = false;
         this.onWalkthroughShowEvent = new core.EventEmitter();
         this.onWalkthroughHideEvent = new core.EventEmitter();
         this.onWalkthroughContentClickedEvent = new core.EventEmitter();
@@ -9071,7 +9072,7 @@ var WalkthroughComponent = (function () {
         if (this.focusElementInteractive && selectorElements) {
             for (var /** @type {?} */ i = 0; i < selectorElements.length; ++i) {
                 var /** @type {?} */ selectorElement = /** @type {?} */ (selectorElements.item(i));
-                selectorElement.classList.add("walkthrough-top-item");
+                selectorElement.style.zIndex = '99999';
             }
         }
     };
@@ -9232,7 +9233,7 @@ var WalkthroughComponent = (function () {
         "tipIconLocation": [{ type: core.Input, args: ["tip-icon-location",] },],
         "tipColor": [{ type: core.Input, args: ["tip-color",] },],
         "focusElementSelector": [{ type: core.Input, args: ["focus-element-selector",] },],
-        "focusElementInteractive": [{ type: core.Input, args: ["focus-element-interactive",] },],
+        "focusElementInteractive": [{ type: core.Input, args: ['focus-element-interactive',] },],
         "isActive": [{ type: core.Input, args: ["is-active",] },],
         "onWalkthroughShowEvent": [{ type: core.Output, args: ["on-walkthrough-show",] },],
         "onWalkthroughHideEvent": [{ type: core.Output, args: ["on-walkthrough-hide",] },],

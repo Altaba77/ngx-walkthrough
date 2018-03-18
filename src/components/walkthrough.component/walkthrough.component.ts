@@ -310,7 +310,7 @@ export class WalkthroughComponent implements AfterViewChecked {
     }
   }
 
-  @Input("focus-element-interactive") focusElementInteractive: boolean;
+  @Input('focus-element-interactive') focusElementInteractive: boolean = false;
 
 
 
@@ -774,7 +774,7 @@ export class WalkthroughComponent implements AfterViewChecked {
     if (this.focusElementInteractive && selectorElements) {
       for (let i = 0; i < selectorElements.length; ++i) {
         const selectorElement: HTMLElement = selectorElements.item(i) as HTMLElement;
-        selectorElement.classList.add("walkthrough-top-item");
+        selectorElement.style.zIndex = '99999';
       }
 
     }
