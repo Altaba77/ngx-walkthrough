@@ -4149,7 +4149,9 @@ var WalkthroughComponent = (function () {
         if (this.focusElementInteractive && selectorElements) {
             for (var /** @type {?} */ i = 0; i < selectorElements.length; ++i) {
                 var /** @type {?} */ selectorElement = /** @type {?} */ (selectorElements.item(i));
-                this._focusElementZindexes[i] = (selectorElement.style.zIndex) ? selectorElement.style.zIndex : ZINDEX_NOT_SET;
+                this._focusElementZindexes[i] = (this._focusElementZindexes[i] != '99999' && selectorElement.style.zIndex) ?
+                    selectorElement.style.zIndex :
+                    ZINDEX_NOT_SET;
                 selectorElement.style.zIndex = '99999';
             }
         }
