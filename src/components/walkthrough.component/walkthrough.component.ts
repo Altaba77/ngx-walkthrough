@@ -8,6 +8,8 @@ import { Hotspot_Close } from './icons/Hotspot_Close';
 import { Component, Input, Output, HostListener, ElementRef, EventEmitter, ViewChild } from '@angular/core';
 import { AfterViewChecked } from '@angular/core/src/metadata/lifecycle_hooks';
 
+
+const ZINDEX_NOT_SET = '-99999';
 @Component({
   selector: 'walkthrough',
   template: `
@@ -231,7 +233,7 @@ import { AfterViewChecked } from '@angular/core/src/metadata/lifecycle_hooks';
 
       /*bottom: 70px;*/
   }
-
+  
   .walkthrough-tip-done-button-text-box {
       /*top: 109px;*/
       /*bottom: 59px;*/
@@ -280,79 +282,9 @@ import { AfterViewChecked } from '@angular/core/src/metadata/lifecycle_hooks';
   `]
 })
 export class WalkthroughComponent implements AfterViewChecked {
-  @Input("walkthrough-type") walkthroughType: string;
-  @Input("button-caption") buttonCaption: string;
-  @Input("use-button") useButton: boolean = false;
-  @Input("main-caption") mainCaption: string;
-  @Input("icon") walkthroughIconWanted: string;
-  @Input("walkthrough-hero-image") walkthroughHeroImage: any;
-  @Input("has-glow") hasGlow: boolean = false;
-  @Input("force-caption-location") forceCaptionLocation: string;
-  @Input("has-backdrop") hasBackdrop: boolean;
 
-  @Input("is-round") isRound: boolean = false;
-  @Input("icon-padding-left") iconPaddingLeft: string;
-  @Input("icon-padding-top") iconPaddingTop: string;
-  @Input("tip-icon-location") tipIconLocation: string;
-  @Input("tip-color") tipColor: string;
-
-  private _focusElementSelector: string;
-  get focusElementSelector(): string {
-    return this._focusElementSelector;
-  }
-  @Input("focus-element-selector")
-  set focusElementSelector(focusElementSelector: string) {
-    if ((!this._focusElementSelector || focusElementSelector !== this._focusElementSelector) && this.isVisible) {
-      this._focusElementSelector = focusElementSelector;
-      this.setFocusOnElement();
-    } else {
-      this._focusElementSelector = focusElementSelector;
-    }
-  }
-
-  @Input('focus-element-interactive') focusElementInteractive: boolean = false;
-
-
-
-  @Input("is-active")
-  set isActive(isActive: boolean) {
-    if (isActive) {
-      this.setWalkthroughElements();
-      this.isVisible = true;
-
-      try {
-        if (this.focusElementSelector) {
-          this.setFocusOnElement();
-        }
-      } catch (e) {
-        console.warn('failed to focus on element prior to timeout: ' + this.focusElementSelector);
-      }
-
-      //Must timeout to make sure we have final correct coordinates after screen totally load
-      if (this.focusElementSelector) {
-        setTimeout(() => {
-          this.setFocusOnElement();
-        }, 100);
-      }
-
-      this.onWalkthroughShowEvent.emit();
-
-    } else {
-      this.isVisible = false;
-    }
-  }
-
-  @Output("on-walkthrough-show") onWalkthroughShowEvent = new EventEmitter<void>();
-  @Output("on-walkthrough-hide") onWalkthroughHideEvent = new EventEmitter<void>();
-  @Output("on-walkthrough-content-clicked") onWalkthroughContentClickedEvent = new EventEmitter<void>();
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    if (this.isVisible) {
-      this.resizeHandler();
-    }
-  }
-
+  // members (must come first - tslint)
+  _focusElementZindexes: string[] = [];
 
   DOM_WALKTHROUGH_CLASS = "walkthrough-background";
   DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS = ".walkthrough-text";
@@ -368,8 +300,8 @@ export class WalkthroughComponent implements AfterViewChecked {
   PADDING_ARROW_START = 5;
   PADDING_ARROW_MARKER = 25;
 
-  isVisible: boolean = false;
-  hasTransclude: boolean = false;
+  isVisible = false;
+  hasTransclude = false;
 
   walkthroughHoleElements: HTMLElement;
   walkthroughTextElement: HTMLElement;
@@ -378,32 +310,109 @@ export class WalkthroughComponent implements AfterViewChecked {
   closeIcon: string;
   walkthroughIcon: any;
 
-  // single_tap: string = require("../assets/Single_Tap.png");
+    // single_tap: string = require('../assets/Single_Tap.png');
 
-  // double_tap: string = require("../assets/Double_Tap.png");
+    // double_tap: string = require('../assets/Double_Tap.png');
 
-  // swipe_down: string = require("../assets/Swipe_Down.png");
+    // swipe_down: string = require('../assets/Swipe_Down.png');
 
-  // swipe_left: string = require("../assets/Swipe_Left.png");
+    // swipe_left: string = require('../assets/Swipe_Left.png');
 
-  // swipe_right: string = require("../assets/Swipe_Right.png");
+    // swipe_right: string = require('../assets/Swipe_Right.png');
 
-  // swipe_up: string = require("../assets/Swipe_Up.png");
+    // swipe_up: string = require('../assets/Swipe_Up.png');
 
-  //the element have been separated as ionic pro cannot handle class with very large string
-  single_tap: string = new Single_Tap().single_tap;
+    // the element have been separated as ionic pro cannot handle class with very large string
+    single_tap: string = new Single_Tap().single_tap;
 
-  double_tap: string = new Double_Tap().double_tap;
+    double_tap: string = new Double_Tap().double_tap;
 
-  swipe_down: string = new Swipe_Down().swipe_down;
+    swipe_down: string = new Swipe_Down().swipe_down;
 
-  swipe_left: string = new Swipe_Left().swipe_left;
+    swipe_left: string = new Swipe_Left().swipe_left;
 
-  swipe_right: string = new Swipe_Right().swipe_right;
+    swipe_right: string = new Swipe_Right().swipe_right;
 
-  swipe_up: string = new Swipe_Up().swipe_up;
+    swipe_up: string = new Swipe_Up().swipe_up;
 
-  @ViewChild("walkthroughcomponent") element: ElementRef;
+
+
+  @Input('walkthrough-type') walkthroughType: string;
+  @Input('button-caption') buttonCaption: string;
+  @Input('use-button') useButton = false;
+  @Input('main-caption') mainCaption: string;
+  @Input('icon') walkthroughIconWanted: string;
+  @Input('walkthrough-hero-image') walkthroughHeroImage: any;
+  @Input('has-glow') hasGlow: boolean = false;
+  @Input('force-caption-location') forceCaptionLocation: string;
+  @Input('has-backdrop') hasBackdrop: boolean;
+
+  @Input('is-round') isRound: boolean = false;
+  @Input('icon-padding-left') iconPaddingLeft: string;
+  @Input('icon-padding-top') iconPaddingTop: string;
+  @Input('tip-icon-location') tipIconLocation: string;
+  @Input('tip-color') tipColor: string;
+
+  private _focusElementSelector: string;
+  get focusElementSelector(): string {
+    return this._focusElementSelector;
+  }
+  @Input('focus-element-selector')
+  set focusElementSelector(focusElementSelector: string) {
+    if ((!this._focusElementSelector || focusElementSelector !== this._focusElementSelector) && this.isVisible) {
+      this._focusElementSelector = focusElementSelector;
+      this.setFocusOnElement();
+    } else {
+      this._focusElementSelector = focusElementSelector;
+    }
+  }
+
+  @Input('focus-element-interactive') focusElementInteractive = false;
+
+
+
+  @Input('is-active')
+  set isActive(isActive: boolean) {
+    if (isActive) {
+      this.setWalkthroughElements();
+      this.isVisible = true;
+
+      try {
+        if (this.focusElementSelector) {
+          this.setFocusOnElement();
+        }
+      } catch (e) {
+        console.warn('failed to focus on element prior to timeout: ' + this.focusElementSelector);
+      }
+
+      // Must timeout to make sure we have final correct coordinates after screen totally load
+      if (this.focusElementSelector) {
+        setTimeout(() => {
+          this.setFocusOnElement();
+        }, 100);
+      }
+
+      this.onWalkthroughShowEvent.emit();
+
+    } else {
+      this.isVisible = false;
+    }
+  }
+
+  @Output('on-walkthrough-show') onWalkthroughShowEvent = new EventEmitter<void>();
+  @Output('on-walkthrough-hide') onWalkthroughHideEvent = new EventEmitter<void>();
+  @Output('on-walkthrough-content-clicked') onWalkthroughContentClickedEvent = new EventEmitter<void>();
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    if (this.isVisible) {
+      this.resizeHandler();
+    }
+  }
+
+
+
+  @ViewChild('walkthroughcomponent') element: ElementRef;
 
   constructor() {
   }
@@ -424,10 +433,10 @@ export class WalkthroughComponent implements AfterViewChecked {
     let holeElements = this.element.nativeElement.querySelectorAll(this.DOM_WALKTHROUGH_HOLE_CLASS);
     this.walkthroughHoleElements = holeElements[0] as HTMLElement;
 
-    let textClass: string = (this.walkthroughType === "tip") ? this.DOM_WALKTHROUGH_TIP_TEXT_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS;
+    let textClass: string = (this.walkthroughType === 'tip') ? this.DOM_WALKTHROUGH_TIP_TEXT_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS;
     this.walkthroughTextElement = this.element.nativeElement.querySelectorAll(textClass)[0] as HTMLElement;
 
-    let iconClass: string = (this.walkthroughType === "tip") ? this.DOM_WALKTHROUGH_TIP_ICON_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS;
+    let iconClass: string = (this.walkthroughType === 'tip') ? this.DOM_WALKTHROUGH_TIP_ICON_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS;
     this.walkthroughIconElement = this.element.nativeElement.querySelectorAll(iconClass)[0] as HTMLElement;
 
     this.walkthroughArrowElement = this.element.nativeElement.querySelectorAll(this.DOM_WALKTHROUGH_ARROW_CLASS)[0] as HTMLElement;
@@ -437,7 +446,7 @@ export class WalkthroughComponent implements AfterViewChecked {
     this.walkthroughIcon = this.getIcon(this.walkthroughIconWanted);
     this.buttonCaption = this.buttonCaption || this.BUTTON_CAPTION_DONE;
     if (this.hasBackdrop === undefined) {
-      this.hasBackdrop = (this.walkthroughType !== "tip");
+      this.hasBackdrop = (this.walkthroughType !== 'tip');
     }
 
   }
@@ -457,37 +466,37 @@ export class WalkthroughComponent implements AfterViewChecked {
    * @param icon 
    */
   getIcon(icon: string) {
-    let retval = "";
+    let retval = '';
     switch (icon) {
-      case ("single_tap"):
+      case ('single_tap'):
         retval = this.single_tap;
         break;
-      case ("double_tap"):
+      case ('double_tap'):
         retval = this.double_tap;
         break;
-      case ("swipe_down"):
+      case ('swipe_down'):
         retval = this.swipe_down;
         break;
-      case ("swipe_left"):
+      case ('swipe_left'):
         retval = this.swipe_left;
         break;
-      case ("swipe_right"):
+      case ('swipe_right'):
         retval = this.swipe_right;
         break;
-      case ("swipe_up"):
+      case ('swipe_up'):
         retval = this.swipe_up;
         break;
-      case ("arrow"):
-        retval = ""; //Return nothing, using other dom element for arrow
+      case ('arrow'):
+        retval = ''; //Return nothing, using other dom element for arrow
         break;
 
     }
-    if (retval === "" && icon && icon.length > 0) {
+    if (retval === '' && icon && icon.length > 0) {
       retval = icon;
     } else {
       this.toDataURL(retval).then((dataUrl) => {
         retval = dataUrl;
-        console.log("icon :", retval);
+        console.log('icon :', retval);
       });
     }
     return retval;
@@ -529,7 +538,7 @@ export class WalkthroughComponent implements AfterViewChecked {
     let isLine = false;
 
     if (Math.abs(startLeft - (pointSubjectLeft + pointSubjectWidth / 2)) < 10) {
-      console.warn("Hole element and text are inline line arrow will be used");
+      console.warn('Hole element and text are inline line arrow will be used');
       endLeft = pointSubjectLeft + pointSubjectWidth / 2;
       isLine = true;
     } else if (startLeft > pointSubjectLeft) {//If hole left to text set arrow to point to middle right
@@ -553,10 +562,10 @@ export class WalkthroughComponent implements AfterViewChecked {
     arrowBottom = (startTop < endTop) ? endTop : startTop;
 
     if (this.forceCaptionLocation === undefined && this.isItemOnText(arrowLeft, arrowTop, arrowRight, arrowBottom)) {
-      this.forceCaptionLocation = "BOTTOM";
+      this.forceCaptionLocation = 'BOTTOM';
     }
 
-    if (this.forceCaptionLocation === "BOTTOM") {
+    if (this.forceCaptionLocation === 'BOTTOM') {
       if (isLine) {
         endTop = pointSubjectTop + pointSubjectHeight + this.PADDING_ARROW_MARKER;
       }
@@ -598,7 +607,7 @@ export class WalkthroughComponent implements AfterViewChecked {
     if (arrowElement.children.length > 0) {
       arrowElement.children[0].remove();
     }
-    arrowElement.insertAdjacentHTML("afterbegin", arrowSvgDom);
+    arrowElement.insertAdjacentHTML('afterbegin', arrowSvgDom);
   }
 
   /**
@@ -661,8 +670,8 @@ export class WalkthroughComponent implements AfterViewChecked {
   //Check once
   getSameAncestor(focusElement: HTMLElement) {
     let retval = null;
-    let walkthroughElementParent = this.element.nativeElement.offsetParent;
-    let focusElementParent = focusElement.offsetParent as HTMLElement;
+    const walkthroughElementParent = this.element.nativeElement.offsetParent;
+    const focusElementParent = focusElement.offsetParent as HTMLElement;
     let walkthroughAncestorIter = walkthroughElementParent as HTMLElement;
     let focusElementAncestorIter = focusElementParent as HTMLElement;
 
@@ -688,24 +697,24 @@ export class WalkthroughComponent implements AfterViewChecked {
    * @param paddingTop
    */
   setIconAndText(iconLeft: number, iconTop: number, paddingLeft: number, paddingTop: number) {
-    let offsetCoordinates = this.getOffsetCoordinates(this.walkthroughIconElement);
-    let iconHeight = offsetCoordinates.height;
-    let iconWidth = offsetCoordinates.width;
-    let iconLeftWithPadding = iconLeft + paddingLeft - (iconWidth / 4);
-    let iconTopWithPadding = iconTop + paddingTop - (iconHeight / 6);
-    let iconRight = iconLeftWithPadding + iconWidth;
-    let iconBottom = iconTopWithPadding + iconHeight;
+    const offsetCoordinates = this.getOffsetCoordinates(this.walkthroughIconElement);
+    const iconHeight = offsetCoordinates.height;
+    const iconWidth = offsetCoordinates.width;
+    const iconLeftWithPadding = iconLeft + paddingLeft - (iconWidth / 4);
+    const iconTopWithPadding = iconTop + paddingTop - (iconHeight / 6);
+    const iconRight = iconLeftWithPadding + iconWidth;
+    const iconBottom = iconTopWithPadding + iconHeight;
     //Check if text overlaps icon or user explicitly wants text at bottom, if does, move it to bottom
     if (this.forceCaptionLocation === undefined && this.isItemOnText(iconLeftWithPadding, iconTopWithPadding, iconRight, iconBottom)) {
-      this.forceCaptionLocation = "BOTTOM";
+      this.forceCaptionLocation = 'BOTTOM';
     }
 
     let iconLocation =
-      "position: absolute;" +
-      "left:" + iconLeftWithPadding + "px;" +
-      "top:" + iconTopWithPadding + "px;";
+      'position: absolute;' +
+      'left:' + iconLeftWithPadding + 'px;' +
+      'top:' + iconTopWithPadding + 'px;';
     this.walkthroughIconElement.setAttribute('style', iconLocation);
-  };
+  }
 
   /**
    * Attempts to highlight the given element ID and set Icon to it if exists, if not use default - right under text
@@ -728,7 +737,7 @@ export class WalkthroughComponent implements AfterViewChecked {
       htmlElement = selectorElements[0] as HTMLElement;
     }
     if (htmlElement) {
-      let offsetCoordinates = this.getOffsetCoordinates(htmlElement);
+      const offsetCoordinates = this.getOffsetCoordinates(htmlElement);
       const width = offsetCoordinates.width;
       const height = offsetCoordinates.height;
       const left = offsetCoordinates.left;
@@ -741,19 +750,19 @@ export class WalkthroughComponent implements AfterViewChecked {
       if (!paddingTop) { paddingTop = 0; }
 
       // If Gesture icon given bind it to hole as well
-      if (this.walkthroughIconWanted && this.walkthroughIconWanted !== "arrow" && this.walkthroughType === "transparency") {
+      if (this.walkthroughIconWanted && this.walkthroughIconWanted !== 'arrow' && this.walkthroughType === 'transparency') {
         setTimeout(() => {
           this.setIconAndText(left + width / 2, top + height / 2, paddingLeft, paddingTop);
         }, 200);
       }
-      if (this.walkthroughIconWanted === "arrow") {
+      if (this.walkthroughIconWanted === 'arrow') {
         // Need to update text location according to conditional class added 'walkthrough-transparency-bottom'
         setTimeout(() => {
           this.setArrowAndText(left, top + paddingTop, width, height, paddingLeft);
         }, 200);
       }
       // if tip mode with icon that we want to set padding to, set it
-      if (this.walkthroughType === "tip" &&
+      if (this.walkthroughType === 'tip' &&
         this.walkthroughIconWanted && this.walkthroughIconWanted.length > 0 &&
         (this.iconPaddingLeft || this.iconPaddingTop)) {
         this.setTipIconPadding(this.iconPaddingLeft, this.iconPaddingTop);
@@ -763,7 +772,7 @@ export class WalkthroughComponent implements AfterViewChecked {
         console.info('Unable to find element requested to be focused: ' + this.focusElementSelector);
       } else {
         // if tip mode with icon that we want to set padding to, set it
-        if (this.walkthroughType === "tip" &&
+        if (this.walkthroughType === 'tip' &&
           this.walkthroughIconWanted && this.walkthroughIconWanted.length > 0 &&
           (this.iconPaddingLeft || this.iconPaddingTop)) {
           this.setTipIconPadding(this.iconPaddingLeft, this.iconPaddingTop);
@@ -774,9 +783,9 @@ export class WalkthroughComponent implements AfterViewChecked {
     if (this.focusElementInteractive && selectorElements) {
       for (let i = 0; i < selectorElements.length; ++i) {
         const selectorElement: HTMLElement = selectorElements.item(i) as HTMLElement;
+        this._focusElementZindexes[i] = (selectorElement.style.zIndex) ? selectorElement.style.zIndex : ZINDEX_NOT_SET;
         selectorElement.style.zIndex = '99999';
       }
-
     }
   }
 
@@ -790,10 +799,10 @@ export class WalkthroughComponent implements AfterViewChecked {
    */
   setFocus(left: number, top: number, width: number, height: number) {
     let holeDimensions =
-      "left:" + (left - this.PADDING_HOLE) + "px;" +
-      "top:" + (top - this.PADDING_HOLE) + "px;" +
-      "width:" + (width + (2 * this.PADDING_HOLE)) + "px;" +
-      "height:" + (height + (2 * this.PADDING_HOLE)) + "px;";
+      'left:' + (left - this.PADDING_HOLE) + 'px;' +
+      'top:' + (top - this.PADDING_HOLE) + 'px;' +
+      'width:' + (width + (2 * this.PADDING_HOLE)) + 'px;' +
+      'height:' + (height + (2 * this.PADDING_HOLE)) + 'px;';
     if (this.walkthroughHoleElements) {
       this.walkthroughHoleElements.setAttribute('style', holeDimensions);
     }
@@ -819,15 +828,15 @@ export class WalkthroughComponent implements AfterViewChecked {
    * @param iconPaddingTop 
    */
   setTipIconPadding(iconPaddingLeft: string, iconPaddingTop: string) {
-    var iconLocation = "";
+    var iconLocation = '';
     if (iconPaddingTop) {
-      iconLocation += "margin-top:" + iconPaddingTop + "px;";
+      iconLocation += 'margin-top:' + iconPaddingTop + 'px;';
     }
     if (iconPaddingLeft) {
-      iconLocation += "right:" + iconPaddingLeft + "%;";
+      iconLocation += 'right:' + iconPaddingLeft + '%;';
     }
     this.walkthroughIconElement.setAttribute('style', iconLocation);
-  };
+  }
 
   /**
    * Close the walkthrough
@@ -852,6 +861,21 @@ export class WalkthroughComponent implements AfterViewChecked {
       arrowElement.children[0].remove();
     }
     this.isVisible = false;
-  };
+
+    // reset z-index on selectedElement
+    const selectedElements = (this.focusElementSelector) ? document.querySelectorAll(this.focusElementSelector) : null;
+    if (selectedElements) {
+      for (let i = 0; i < selectedElements.length; ++i) {
+        const curElement: HTMLElement = selectedElements.item(i) as HTMLElement;
+        if (this._focusElementZindexes[i] !== ZINDEX_NOT_SET) {
+          curElement.style.zIndex = this._focusElementZindexes[i];
+        } else {
+          curElement.style.zIndex = null;
+          delete curElement.style.zIndex;
+        }
+      }
+      this._focusElementZindexes = [];
+    }
+  }
 
 }
