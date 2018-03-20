@@ -4157,7 +4157,7 @@ WalkthroughComponent.decorators = [
       </div>
     </div>
   </div>
-  <div [hidden]="!hasBackdrop" class="walkthrough-hole" [ngClass]="{'walkthrough-hole-round': isRound}">
+  <div [hidden]="!hasBackdrop" class="walkthrough-hole" [ngClass]="{'walkthrough-hole-round': isRound}" (click)="onWalkthroughContentClicked()">
   </div>
   <div [hidden]="!(hasGlow && (focusElementSelector))" class="walkthrough-hole walkthrough-hole-glow" [ngClass]="{'walkthrough-hole-round': isRound}">
   </div>
