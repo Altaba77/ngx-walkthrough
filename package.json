@@ -1,7 +1,7 @@
 {
     "name": "ngx-walkthrough",
     "private": true,
-    "version": "0.2.8",
+    "version": "0.2.9",
     "engines": {
         "node": "9.8.0",
         "npm": "5.6.9"

@@ -216,7 +216,7 @@ const ZINDEX_NOT_SET = '-99999';
   }
 
   .walkthrough-tip-icon-image-front {
-      z-index: 1002;
+      z-index: 9999999;
   }
 
   .walkthrough-tip-icon-image-back {
