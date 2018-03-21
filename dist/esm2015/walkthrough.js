@@ -4020,8 +4020,12 @@ class WalkthroughComponent {
         if (this.focusElementInteractive && selectorElements) {
             for (let /** @type {?} */ i = 0; i < selectorElements.length; ++i) {
                 const /** @type {?} */ selectorElement = /** @type {?} */ (selectorElements.item(i));
-                this._focusElementZindexes[i] = (selectorElement.style.zIndex) ? selectorElement.style.zIndex : ZINDEX_NOT_SET;
-                selectorElement.style.zIndex = '99999';
+                if (selectorElement.style.zIndex !== '99999') {
+                    this._focusElementZindexes[i] = (selectorElement.style.zIndex) ?
+                        selectorElement.style.zIndex :
+                        ZINDEX_NOT_SET;
+                    selectorElement.style.zIndex = '99999';
+                }
             }
         }
     }
@@ -4101,12 +4105,12 @@ class WalkthroughComponent {
         if (selectedElements) {
             for (let /** @type {?} */ i = 0; i < selectedElements.length; ++i) {
                 const /** @type {?} */ curElement = /** @type {?} */ (selectedElements.item(i));
+                console.log(`focus elem ${i} z-index is ${this._focusElementZindexes[i]} `);
                 if (this._focusElementZindexes[i] !== ZINDEX_NOT_SET) {
                     curElement.style.zIndex = this._focusElementZindexes[i];
                 }
                 else {
-                    curElement.style.zIndex = null;
-                    delete curElement.style.zIndex;
+                    curElement.style.zIndex = 'auto';
                 }
             }
             this._focusElementZindexes = [];
@@ -4153,7 +4157,7 @@ WalkthroughComponent.decorators = [
       </div>
     </div>
   </div>
-  <div [hidden]="!hasBackdrop" class="walkthrough-hole" [ngClass]="{'walkthrough-hole-round': isRound}">
+  <div [hidden]="!hasBackdrop" class="walkthrough-hole" [ngClass]="{'walkthrough-hole-round': isRound}" (click)="onWalkthroughContentClicked()">
   </div>
   <div [hidden]="!(hasGlow && (focusElementSelector))" class="walkthrough-hole walkthrough-hole-glow" [ngClass]="{'walkthrough-hole-round': isRound}">
   </div>

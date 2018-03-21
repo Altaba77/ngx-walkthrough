@@ -49,7 +49,7 @@ const ZINDEX_NOT_SET = '-99999';
       </div>
     </div>
   </div>
-  <div [hidden]="!hasBackdrop" class="walkthrough-hole" [ngClass]="{'walkthrough-hole-round': isRound}">
+  <div [hidden]="!hasBackdrop" class="walkthrough-hole" [ngClass]="{'walkthrough-hole-round': isRound}" (click)="onWalkthroughContentClicked()">
   </div>
   <div [hidden]="!(hasGlow && (focusElementSelector))" class="walkthrough-hole walkthrough-hole-glow" [ngClass]="{'walkthrough-hole-round': isRound}">
   </div>
@@ -783,8 +783,12 @@ export class WalkthroughComponent implements AfterViewChecked {
     if (this.focusElementInteractive && selectorElements) {
       for (let i = 0; i < selectorElements.length; ++i) {
         const selectorElement: HTMLElement = selectorElements.item(i) as HTMLElement;
-        this._focusElementZindexes[i] = (selectorElement.style.zIndex) ? selectorElement.style.zIndex : ZINDEX_NOT_SET;
-        selectorElement.style.zIndex = '99999';
+        if (selectorElement.style.zIndex !== '99999' ) {
+          this._focusElementZindexes[i] = (selectorElement.style.zIndex) ?
+              selectorElement.style.zIndex :
+              ZINDEX_NOT_SET;
+          selectorElement.style.zIndex = '99999';
+        }
       }
     }
   }
@@ -867,11 +871,11 @@ export class WalkthroughComponent implements AfterViewChecked {
     if (selectedElements) {
       for (let i = 0; i < selectedElements.length; ++i) {
         const curElement: HTMLElement = selectedElements.item(i) as HTMLElement;
+        console.log(`focus elem ${i} z-index is ${this._focusElementZindexes[i]} `);
         if (this._focusElementZindexes[i] !== ZINDEX_NOT_SET) {
           curElement.style.zIndex = this._focusElementZindexes[i];
         } else {
-          curElement.style.zIndex = null;
-          delete curElement.style.zIndex;
+          curElement.style.zIndex = 'auto';
         }
       }
       this._focusElementZindexes = [];

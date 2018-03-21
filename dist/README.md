@@ -171,6 +171,7 @@ Inputs:
 - `tip-icon-location` (optional) - For tip walkthrough. In case there is an overlap between the tip text box and the tip icon you can define here which is on top. Either "FRONT" or "BACK"
 - `force-caption-location` (optional) - Any walkthrough type. Set caption location at the top of screen or closer to bottom. Acceptable values: "TOP" or "BOTTOM"
 - `tip-color` (optional) - For tip walkthrough. Define the tip textbox background color. Currently supports "BLACK" or "WHITE" values
+- `focus-element-interactive` (optional, defaults to false)  - Will bring the focus element (or elements) into the foreground, allowing the user to interact with them during the walkthrough
 
 Ouputs:
 - `on-walkthrough-show` - Any walkthrough type. Emit a void event when walkthrough is displayed
