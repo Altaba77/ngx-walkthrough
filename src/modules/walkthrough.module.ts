@@ -11,7 +11,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
         // Components.
         WalkthroughComponent
     ],
-    imports:[
+    imports: [
         CommonModule,
         BrowserModule
     ],

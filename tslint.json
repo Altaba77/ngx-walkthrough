@@ -16,10 +16,11 @@
             true,
             "element",
             [
-                "cmp-prefix1",
-                "cmp-prefix2"
+                "ngx"
             ],
             "kebab-case"
-        ]
+        ],
+        "max-line-length": [false],
+         "no-input-rename": [false]
     }
 }
