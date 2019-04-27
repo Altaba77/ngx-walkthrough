@@ -21,6 +21,8 @@
             "kebab-case"
         ],
         "max-line-length": [false],
-         "no-input-rename": [false]
+        "no-input-rename": [false],
+        "no-output-on-prefix": [false],
+        "no-output-rename": [false]
     }
 }

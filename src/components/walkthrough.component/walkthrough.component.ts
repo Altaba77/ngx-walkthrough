@@ -5,8 +5,8 @@ import { Swipe_Down } from './icons/Swipe_Down';
 import { Double_Tap } from './icons/Double_Tap';
 import { Single_Tap } from './icons/Single_Tap';
 import { Hotspot_Close } from './icons/Hotspot_Close';
-import { Component, Input, Output, HostListener, ElementRef, EventEmitter, ViewChild } from '@angular/core';
-import { AfterViewChecked } from '@angular/core/src/metadata/lifecycle_hooks';
+import { Component, Input, Output, HostListener, ElementRef, EventEmitter, ViewChild, SimpleChange } from '@angular/core';
+import { AfterViewChecked, OnChanges, SimpleChanges, AfterContentChecked } from '@angular/core/src/metadata/lifecycle_hooks';
 
 
 const ZINDEX_NOT_SET = '-99999';
@@ -281,7 +281,8 @@ const ZINDEX_NOT_SET = '-99999';
   }
   `]
 })
-export class WalkthroughComponent implements AfterViewChecked {
+export class WalkthroughComponent implements AfterContentChecked, AfterViewChecked, OnChanges {
+
   _focusElementZindexes: string[] = [];
 
   DOM_WALKTHROUGH_CLASS = 'walkthrough-background';
@@ -336,7 +337,7 @@ export class WalkthroughComponent implements AfterViewChecked {
   @ViewChild('walkthroughcomponent')
   element!: ElementRef;
 
-  @Input('walkthrough-type') walkthroughType!: string;
+  @Input('walkthrough-type') walkthroughType: string|undefined;
   @Input('button-caption') buttonCaption: string|undefined;
   @Input('use-button') useButton = false;
   @Input('main-caption') mainCaption: string|undefined;
@@ -352,56 +353,14 @@ export class WalkthroughComponent implements AfterViewChecked {
   @Input('tip-icon-location') tipIconLocation: string|undefined;
   @Input('tip-color') tipColor: string|undefined;
 
-  private _focusElementSelector = '';
-  get focusElementSelector(): string {
-    return this._focusElementSelector;
-  }
-  @Input('focus-element-selector')
-  set focusElementSelector(focusElementSelector: string) {
-    if ((!this._focusElementSelector || focusElementSelector !== this._focusElementSelector) && this.isVisible) {
-      this._focusElementSelector = focusElementSelector;
-      this.setFocusOnElement();
-    } else {
-      this._focusElementSelector = focusElementSelector;
-    }
-  }
+  @Input('focus-element-selector') focusElementSelector= '';
 
-  // tslint:disable-next-line:no-input-rename
   @Input('focus-element-interactive') focusElementInteractive = false;
 
-  @Input('is-active')
-  set isActive(isActive: boolean) {
-    if (isActive) {
-      this.setWalkthroughElements();
-      this.isVisible = true;
+  @Input('is-active') isActive = false;
 
-      try {
-        if (this.focusElementSelector) {
-          this.setFocusOnElement();
-        }
-      } catch (e) {
-        console.warn('failed to focus on element prior to timeout: ' + this.focusElementSelector);
-      }
-
-      // Must timeout to make sure we have final correct coordinates after screen totally load
-      if (this.focusElementSelector) {
-        setTimeout(() => {
-          this.setFocusOnElement();
-        }, 100);
-      }
-
-      this.onWalkthroughShowEvent.emit();
-
-    } else {
-      this.isVisible = false;
-    }
-  }
-
-  // tslint:disable-next-line:no-output-rename no-output-on-prefix
   @Output('on-walkthrough-show') onWalkthroughShowEvent = new EventEmitter<void>();
-  // tslint:disable-next-line:no-output-rename no-output-on-prefix
   @Output('on-walkthrough-hide') onWalkthroughHideEvent = new EventEmitter<void>();
-  // tslint:disable-next-line:no-output-rename no-output-on-prefix
   @Output('on-walkthrough-content-clicked') onWalkthroughContentClickedEvent = new EventEmitter<void>();
 
   @HostListener('window:resize', ['$event'])
@@ -412,6 +371,24 @@ export class WalkthroughComponent implements AfterViewChecked {
   }
 
   constructor() {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    for (const propName in changes) {
+      if (changes.hasOwnProperty(propName)) {
+        const change: SimpleChange = changes[propName];
+            if (propName === 'isActive' && change.currentValue) {
+              this.setWalkthroughElements();
+              this.isVisible = change.currentValue;
+            }
+      }
+    }
+  }
+
+  ngAfterContentChecked(): void {
+    if (this.focusElementSelector && this.isVisible) {
+      this.setFocusOnElement();
+    }
   }
 
   /**
@@ -445,13 +422,16 @@ export class WalkthroughComponent implements AfterViewChecked {
     if (this.hasBackdrop === undefined) {
       this.hasBackdrop = (this.walkthroughType !== 'tip');
     }
-
   }
 
   ngAfterViewChecked() {
     const translude = this.element.nativeElement.querySelectorAll('.' + this.DOM_TRANSCLUDE);
     if (translude.length > 0 && translude[0].children.length > 0) {
       this.hasTransclude = true;
+    }
+
+    if (this.isVisible) {
+      this.onWalkthroughShowEvent.emit();
     }
   }
 
