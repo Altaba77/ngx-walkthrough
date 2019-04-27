@@ -21,7 +21,7 @@
     <div class="walkthrough-inner" [ngClass]="{'walkthrough-top': ((!forceCaptionLocation && !tipLocation) || forceCaptionLocation==='TOP' || tipLocation =='TOP'), 'walkthrough-bottom': (forceCaptionLocation=='BOTTOM' || tipLocation =='BOTTOM')}">
       <img class="walkthrough-element walkthrough-tip-icon-text-box" [ngClass]="{'walkthrough-tip-icon-image-front': tipIconLocation==='FRONT', 'walkthrough-tip-icon-image-back': tipIconLocation=='BACK'}"
         [hidden]="walkthroughIconWanted && walkthroughIconWanted==='arrow'" src="{{walkthroughIcon}}" alt="icon">
-      <button class="walkthrough-done-button walkthrough-tip-done-button-text-box" [ngClass]="{'walkthrough-tip-done-button-no-icon': !icon}"
+      <button class="walkthrough-done-button walkthrough-tip-done-button-text-box" [ngClass]="{'walkthrough-tip-done-button-no-icon': !closeIcon}"
         type="button" *ngIf="useButton" (click)="onCloseClicked($event)">
         <img class="walkthrough-tip-button-image-text-box" src="{{closeIcon}}" alt="x">
       </button>

@@ -11,7 +11,7 @@ import { AfterViewChecked } from '@angular/core/src/metadata/lifecycle_hooks';
 
 const ZINDEX_NOT_SET = '-99999';
 @Component({
-  selector: 'walkthrough',
+  selector: 'ngx-walkthrough',
   template: `
   <div #walkthroughcomponent class="{{DOM_WALKTHROUGH_CLASS}}" [hidden]="!isVisible" [ngClass]="{'walkthrough-active': isVisible}" (click)="onCloseClicked($event)">
   <div class="walkthrough-container walkthrough-container-transparency" [hidden]="walkthroughType!=='transparency'">
@@ -27,16 +27,16 @@ const ZINDEX_NOT_SET = '-99999';
         <img class="walkthrough-element walkthrough-icon" [hidden]="walkthroughIconWanted && walkthroughIconWanted==='arrow'" src="{{walkthroughIcon}}">
         <div class="walkthrough-element walkthrough-arrow" [hidden]="walkthroughIconWanted!=='arrow'"></div>
         <button class="walkthrough-element walkthrough-button-positive walkthrough-done-button" type="button" *ngIf="useButton" (click)="onCloseClicked($event)">
-          {{buttonCaption}}
+          {{ buttonCaption }}
         </button>
       </div>
     </div>
   </div>
   <div class="walkthrough-container walkthrough-container-tip" [hidden]="walkthroughType!=='tip'">
-    <div class="walkthrough-inner" [ngClass]="{'walkthrough-top': ((!forceCaptionLocation && !tipLocation) || forceCaptionLocation==='TOP' || tipLocation =='TOP'), 'walkthrough-bottom': (forceCaptionLocation=='BOTTOM' || tipLocation =='BOTTOM')}">
+    <div class="walkthrough-inner" [ngClass]="{'walkthrough-top': (!forceCaptionLocation || forceCaptionLocation==='TOP'), 'walkthrough-bottom': (forceCaptionLocation==='BOTTOM')}">
       <img class="walkthrough-element walkthrough-tip-icon-text-box" [ngClass]="{'walkthrough-tip-icon-image-front': tipIconLocation==='FRONT', 'walkthrough-tip-icon-image-back': tipIconLocation=='BACK'}"
         [hidden]="walkthroughIconWanted && walkthroughIconWanted==='arrow'" src="{{walkthroughIcon}}" alt="icon">
-      <button class="walkthrough-done-button walkthrough-tip-done-button-text-box" [ngClass]="{'walkthrough-tip-done-button-no-icon': !icon}"
+      <button class="walkthrough-done-button walkthrough-tip-done-button-text-box" [ngClass]="{'walkthrough-tip-done-button-no-icon': !closeIcon}"
         type="button" *ngIf="useButton" (click)="onCloseClicked($event)">
         <img class="walkthrough-tip-button-image-text-box" src="{{closeIcon}}" alt="x">
       </button>
@@ -233,7 +233,7 @@ const ZINDEX_NOT_SET = '-99999';
 
       /*bottom: 70px;*/
   }
-  
+
   .walkthrough-tip-done-button-text-box {
       /*top: 109px;*/
       /*bottom: 59px;*/
@@ -282,20 +282,18 @@ const ZINDEX_NOT_SET = '-99999';
   `]
 })
 export class WalkthroughComponent implements AfterViewChecked {
-
-  // members (must come first - tslint)
   _focusElementZindexes: string[] = [];
 
-  DOM_WALKTHROUGH_CLASS = "walkthrough-background";
-  DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS = ".walkthrough-text";
-  DOM_WALKTHROUGH_TIP_TEXT_CLASS = ".walkthrough-tip-text-box";
-  DOM_WALKTHROUGH_HOLE_CLASS = ".walkthrough-hole";
-  DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS = ".walkthrough-icon";
-  DOM_WALKTHROUGH_TIP_ICON_CLASS = ".walkthrough-tip-icon-text-box";
-  DOM_WALKTHROUGH_ARROW_CLASS = ".walkthrough-arrow";
-  DOM_WALKTHROUGH_DONE_BUTTON_CLASS = "walkthrough-done-button";
-  DOM_TRANSCLUDE = "walkthrough-transclude";
-  BUTTON_CAPTION_DONE = "Got it!";
+  DOM_WALKTHROUGH_CLASS = 'walkthrough-background';
+  DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS = '.walkthrough-text';
+  DOM_WALKTHROUGH_TIP_TEXT_CLASS = '.walkthrough-tip-text-box';
+  DOM_WALKTHROUGH_HOLE_CLASS = '.walkthrough-hole';
+  DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS = '.walkthrough-icon';
+  DOM_WALKTHROUGH_TIP_ICON_CLASS = '.walkthrough-tip-icon-text-box';
+  DOM_WALKTHROUGH_ARROW_CLASS = '.walkthrough-arrow';
+  DOM_WALKTHROUGH_DONE_BUTTON_CLASS = 'walkthrough-done-button';
+  DOM_TRANSCLUDE = 'walkthrough-transclude';
+  BUTTON_CAPTION_DONE = 'Got it!';
   PADDING_HOLE = 5;
   PADDING_ARROW_START = 5;
   PADDING_ARROW_MARKER = 25;
@@ -303,57 +301,58 @@ export class WalkthroughComponent implements AfterViewChecked {
   isVisible = false;
   hasTransclude = false;
 
-  walkthroughHoleElements: HTMLElement;
-  walkthroughTextElement: HTMLElement;
-  walkthroughIconElement: HTMLElement;
-  walkthroughArrowElement: HTMLElement;
-  closeIcon: string;
+  walkthroughHoleElements!: HTMLElement;
+  walkthroughTextElement!: HTMLElement;
+  walkthroughIconElement!: HTMLElement;
+  walkthroughArrowElement!: HTMLElement;
+  closeIcon: string | undefined;
   walkthroughIcon: any;
 
-    // single_tap: string = require('../assets/Single_Tap.png');
+  // single_tap: string = require('../assets/Single_Tap.png');
 
-    // double_tap: string = require('../assets/Double_Tap.png');
+  // double_tap: string = require('../assets/Double_Tap.png');
 
-    // swipe_down: string = require('../assets/Swipe_Down.png');
+  // swipe_down: string = require('../assets/Swipe_Down.png');
 
-    // swipe_left: string = require('../assets/Swipe_Left.png');
+  // swipe_left: string = require('../assets/Swipe_Left.png');
 
-    // swipe_right: string = require('../assets/Swipe_Right.png');
+  // swipe_right: string = require('../assets/Swipe_Right.png');
 
-    // swipe_up: string = require('../assets/Swipe_Up.png');
+  // swipe_up: string = require('../assets/Swipe_Up.png');
 
-    // the element have been separated as ionic pro cannot handle class with very large string
-    single_tap: string = new Single_Tap().single_tap;
+  // the element have been separated as ionic pro cannot handle class with very large string
+  single_tap: string = new Single_Tap().single_tap;
 
-    double_tap: string = new Double_Tap().double_tap;
+  double_tap: string = new Double_Tap().double_tap;
 
-    swipe_down: string = new Swipe_Down().swipe_down;
+  swipe_down: string = new Swipe_Down().swipe_down;
 
-    swipe_left: string = new Swipe_Left().swipe_left;
+  swipe_left: string = new Swipe_Left().swipe_left;
 
-    swipe_right: string = new Swipe_Right().swipe_right;
+  swipe_right: string = new Swipe_Right().swipe_right;
 
-    swipe_up: string = new Swipe_Up().swipe_up;
+  swipe_up: string = new Swipe_Up().swipe_up;
 
+  @ViewChild('walkthroughcomponent')
+  element!: ElementRef;
 
-
-  @Input('walkthrough-type') walkthroughType: string;
-  @Input('button-caption') buttonCaption: string;
+  @Input('walkthrough-type') walkthroughType!: string;
+  @Input('button-caption') buttonCaption: string|undefined;
   @Input('use-button') useButton = false;
-  @Input('main-caption') mainCaption: string;
-  @Input('icon') walkthroughIconWanted: string;
+  @Input('main-caption') mainCaption: string|undefined;
+  @Input('icon') walkthroughIconWanted: string|undefined;
   @Input('walkthrough-hero-image') walkthroughHeroImage: any;
-  @Input('has-glow') hasGlow: boolean = false;
-  @Input('force-caption-location') forceCaptionLocation: string;
-  @Input('has-backdrop') hasBackdrop: boolean;
+  @Input('has-glow') hasGlow = false;
+  @Input('force-caption-location') forceCaptionLocation: string|undefined;
+  @Input('has-backdrop') hasBackdrop: boolean|undefined;
 
-  @Input('is-round') isRound: boolean = false;
-  @Input('icon-padding-left') iconPaddingLeft: string;
-  @Input('icon-padding-top') iconPaddingTop: string;
-  @Input('tip-icon-location') tipIconLocation: string;
-  @Input('tip-color') tipColor: string;
+  @Input('is-round') isRound = false;
+  @Input('icon-padding-left') iconPaddingLeft = '';
+  @Input('icon-padding-top') iconPaddingTop = '';
+  @Input('tip-icon-location') tipIconLocation: string|undefined;
+  @Input('tip-color') tipColor: string|undefined;
 
-  private _focusElementSelector: string;
+  private _focusElementSelector = '';
   get focusElementSelector(): string {
     return this._focusElementSelector;
   }
@@ -367,9 +366,8 @@ export class WalkthroughComponent implements AfterViewChecked {
     }
   }
 
+  // tslint:disable-next-line:no-input-rename
   @Input('focus-element-interactive') focusElementInteractive = false;
-
-
 
   @Input('is-active')
   set isActive(isActive: boolean) {
@@ -399,8 +397,11 @@ export class WalkthroughComponent implements AfterViewChecked {
     }
   }
 
+  // tslint:disable-next-line:no-output-rename no-output-on-prefix
   @Output('on-walkthrough-show') onWalkthroughShowEvent = new EventEmitter<void>();
+  // tslint:disable-next-line:no-output-rename no-output-on-prefix
   @Output('on-walkthrough-hide') onWalkthroughHideEvent = new EventEmitter<void>();
+  // tslint:disable-next-line:no-output-rename no-output-on-prefix
   @Output('on-walkthrough-content-clicked') onWalkthroughContentClickedEvent = new EventEmitter<void>();
 
   @HostListener('window:resize', ['$event'])
@@ -409,10 +410,6 @@ export class WalkthroughComponent implements AfterViewChecked {
       this.resizeHandler();
     }
   }
-
-
-
-  @ViewChild('walkthroughcomponent') element: ElementRef;
 
   constructor() {
   }
@@ -430,13 +427,13 @@ export class WalkthroughComponent implements AfterViewChecked {
    * init the element of the walkthrough
    */
   setWalkthroughElements() {
-    let holeElements = this.element.nativeElement.querySelectorAll(this.DOM_WALKTHROUGH_HOLE_CLASS);
+    const holeElements = this.element.nativeElement.querySelectorAll(this.DOM_WALKTHROUGH_HOLE_CLASS);
     this.walkthroughHoleElements = holeElements[0] as HTMLElement;
 
-    let textClass: string = (this.walkthroughType === 'tip') ? this.DOM_WALKTHROUGH_TIP_TEXT_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS;
+    const textClass: string = (this.walkthroughType === 'tip') ? this.DOM_WALKTHROUGH_TIP_TEXT_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_TEXT_CLASS;
     this.walkthroughTextElement = this.element.nativeElement.querySelectorAll(textClass)[0] as HTMLElement;
 
-    let iconClass: string = (this.walkthroughType === 'tip') ? this.DOM_WALKTHROUGH_TIP_ICON_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS;
+    const iconClass: string = (this.walkthroughType === 'tip') ? this.DOM_WALKTHROUGH_TIP_ICON_CLASS : this.DOM_WALKTHROUGH_TRANSPARENCY_ICON_CLASS;
     this.walkthroughIconElement = this.element.nativeElement.querySelectorAll(iconClass)[0] as HTMLElement;
 
     this.walkthroughArrowElement = this.element.nativeElement.querySelectorAll(this.DOM_WALKTHROUGH_ARROW_CLASS)[0] as HTMLElement;
@@ -451,11 +448,8 @@ export class WalkthroughComponent implements AfterViewChecked {
 
   }
 
-  /**
-   * 
-   */
   ngAfterViewChecked() {
-    let translude = this.element.nativeElement.querySelectorAll('.' + this.DOM_TRANSCLUDE);
+    const translude = this.element.nativeElement.querySelectorAll('.' + this.DOM_TRANSCLUDE);
     if (translude.length > 0 && translude[0].children.length > 0) {
       this.hasTransclude = true;
     }
@@ -463,9 +457,9 @@ export class WalkthroughComponent implements AfterViewChecked {
 
   /**
    * Get the icon specify by the input
-   * @param icon 
+   * @param icon
    */
-  getIcon(icon: string) {
+  getIcon(icon: string|undefined) {
     let retval = '';
     switch (icon) {
       case ('single_tap'):
@@ -487,16 +481,18 @@ export class WalkthroughComponent implements AfterViewChecked {
         retval = this.swipe_up;
         break;
       case ('arrow'):
-        retval = ''; //Return nothing, using other dom element for arrow
+        // Return nothing, using other dom element for arrow
+        retval = '';
         break;
-
     }
+
     if (retval === '' && icon && icon.length > 0) {
       retval = icon;
     } else {
-      this.toDataURL(retval).then((dataUrl) => {
-        retval = dataUrl;
-        console.log('icon :', retval);
+      this.toDataURL(retval).then((dataUrl: string | ArrayBuffer | null) => {
+        if ( typeof dataUrl === 'string' ) {
+          retval = dataUrl;
+        }
       });
     }
     return retval;
@@ -504,34 +500,34 @@ export class WalkthroughComponent implements AfterViewChecked {
 
   /**
    * Convert url in blob
-   * @param url 
+   * @param url
    */
-  toDataURL(url: string): Promise<any> {
+  toDataURL(url: string): Promise<string | ArrayBuffer | null> {
     return fetch(url)
       .then(response => response.blob())
       .then(blob => {
-        return new Promise((resolve, reject) => {
+        return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
           const reader = new FileReader();
           reader.onloadend = () => {
-            resolve(reader.result);
+              resolve(reader.result);
             reader.onerror = reject;
             reader.readAsDataURL(blob);
-          }
+          };
         });
-      })
+      });
   }
 
   /**
    * Set the text position accordint the hole and arrow position plus set the arrow
-   * @param pointSubjectLeft 
-   * @param pointSubjectTop 
-   * @param pointSubjectWidth 
-   * @param pointSubjectHeight 
-   * @param paddingLeft 
+   * @param pointSubjectLeft
+   * @param pointSubjectTop
+   * @param pointSubjectWidth
+   * @param pointSubjectHeight
+   * @param paddingLeft
    */
   setArrowAndText(pointSubjectLeft: number, pointSubjectTop: number, pointSubjectWidth: number, pointSubjectHeight: number, paddingLeft: number) {
-    let offsetCoordinates = this.getOffsetCoordinates(this.walkthroughTextElement);
-    let startLeft = offsetCoordinates.left + offsetCoordinates.width / 2;
+    const offsetCoordinates = this.getOffsetCoordinates(this.walkthroughTextElement);
+    const startLeft = offsetCoordinates.left + offsetCoordinates.width / 2;
     let startTop = offsetCoordinates.top + offsetCoordinates.height + this.PADDING_ARROW_START;
 
     let endLeft = 0;
@@ -541,9 +537,11 @@ export class WalkthroughComponent implements AfterViewChecked {
       console.warn('Hole element and text are inline line arrow will be used');
       endLeft = pointSubjectLeft + pointSubjectWidth / 2;
       isLine = true;
-    } else if (startLeft > pointSubjectLeft) {//If hole left to text set arrow to point to middle right
+    } else if (startLeft > pointSubjectLeft) {
+      // If hole left to text set arrow to point to middle right
       endLeft = pointSubjectLeft + paddingLeft + pointSubjectWidth;
-    } else if (startLeft < pointSubjectLeft) {//If hole right to text set arrow to point to middle left
+    } else if (startLeft < pointSubjectLeft) {
+      // If hole right to text set arrow to point to middle left
       endLeft = pointSubjectLeft - paddingLeft;
     }
     let endTop;
@@ -555,7 +553,7 @@ export class WalkthroughComponent implements AfterViewChecked {
     }
 
     let arrowLeft, arrowRight, arrowTop, arrowBottom;
-    //Check if text overlaps icon or user explicitly wants text at bottom, if does, move it to bottom
+    // Check if text overlaps icon or user explicitly wants text at bottom, if does, move it to bottom
     arrowLeft = (startLeft < endLeft) ? startLeft : endLeft;
     arrowRight = (startLeft < endLeft) ? endLeft : startLeft;
     arrowTop = (startTop < endTop) ? startTop : endTop;
@@ -582,7 +580,7 @@ export class WalkthroughComponent implements AfterViewChecked {
         '<path d="M2,1 L2,10 L10,6 L2,2" style="fill:#fff;" />' +
         '</marker>' +
         '</defs>' +
-        '<line x1=' + endLeft + " y1=" + startTop + " x2=" + endLeft + " y2=" + endTop + " " +
+        '<line x1=' + endLeft + ' y1=' + startTop + ' x2=' + endLeft + ' y2=' + endTop + ' ' +
         'style="stroke:#fff; stroke-width: 2px; fill: none;' +
         'marker-end: url(#arrow);"/>' +
         '/>' +
@@ -603,7 +601,7 @@ export class WalkthroughComponent implements AfterViewChecked {
     }
 
 
-    let arrowElement = this.element.nativeElement.querySelector(this.DOM_WALKTHROUGH_ARROW_CLASS);
+    const arrowElement = this.element.nativeElement.querySelector(this.DOM_WALKTHROUGH_ARROW_CLASS);
     if (arrowElement.children.length > 0) {
       arrowElement.children[0].remove();
     }
@@ -612,24 +610,26 @@ export class WalkthroughComponent implements AfterViewChecked {
 
   /**
    * Check if given icon covers text or if the text cover the hole
-   * @param iconLeft 
-   * @param iconTop 
-   * @param iconRight 
-   * @param iconBottom 
+   * @param iconLeft
+   * @param iconTop
+   * @param iconRight
+   * @param iconBottom
    */
   isItemOnText(iconLeft: number, iconTop: number, iconRight: number, iconBottom: number) {
-    let holeCoordinates = this.getOffsetCoordinates(this.walkthroughHoleElements);
-    let offsetCoordinates = this.getOffsetCoordinates(this.walkthroughTextElement);
+    const holeCoordinates = this.getOffsetCoordinates(this.walkthroughHoleElements);
+    const offsetCoordinates = this.getOffsetCoordinates(this.walkthroughTextElement);
 
-    let holeLeft = holeCoordinates.left;
-    let holeRight = holeCoordinates.left + holeCoordinates.width;
-    let holeTop = holeCoordinates.top;
-    let holeBottom = holeCoordinates.top + holeCoordinates.height;
+    const holeLeft = holeCoordinates.left;
+    const holeRight = holeCoordinates.left + holeCoordinates.width;
+    const holeTop = holeCoordinates.top;
+    const holeBottom = holeCoordinates.top + holeCoordinates.height;
 
-    let textLeft = document.body.clientWidth / 4;//needs to be calculated differently due to being a 'pre'. //offsetCoordinates.left;
-    let textRight = document.body.clientWidth / 4 * 3;//offsetCoordinates.left + offsetCoordinates.width;
-    let textTop = offsetCoordinates.top;
-    let textBottom = offsetCoordinates.top + offsetCoordinates.height;
+    const textLeft = document.body.clientWidth / 4;
+    // needs to be calculated differently due to being a 'pre'. //offsetCoordinates.left;
+    const textRight = document.body.clientWidth / 4 * 3;
+    // offsetCoordinates.left + offsetCoordinates.width;
+    const textTop = offsetCoordinates.top;
+    const textBottom = offsetCoordinates.top + offsetCoordinates.height;
 
     if (!(holeRight < textLeft ||
       holeLeft > textRight ||
@@ -642,11 +642,11 @@ export class WalkthroughComponent implements AfterViewChecked {
       iconLeft > textRight ||
       iconBottom < textTop ||
       iconTop > textBottom);
-  };
+  }
 
   /**
-   * 
-   * @param focusElement 
+   * REcover the offset coordinates
+   * @param focusElement
    */
   getOffsetCoordinates(focusElement: HTMLElement) {
     let width: number;
@@ -667,7 +667,7 @@ export class WalkthroughComponent implements AfterViewChecked {
     return { top: top, left: left, height: height, width: width };
   }
 
-  //Check once
+  // Check once
   getSameAncestor(focusElement: HTMLElement) {
     let retval = null;
     const walkthroughElementParent = this.element.nativeElement.offsetParent;
@@ -676,7 +676,7 @@ export class WalkthroughComponent implements AfterViewChecked {
     let focusElementAncestorIter = focusElementParent as HTMLElement;
 
     while (walkthroughAncestorIter && !retval) {
-      focusElementAncestorIter = focusElementParent; //reset
+      focusElementAncestorIter = focusElementParent; // reset
       while (focusElementAncestorIter && !retval) {
         if (focusElementAncestorIter === walkthroughAncestorIter) {
           retval = walkthroughAncestorIter;
@@ -687,7 +687,7 @@ export class WalkthroughComponent implements AfterViewChecked {
       walkthroughAncestorIter = walkthroughAncestorIter.offsetParent as HTMLElement;
     }
     return retval;
-  };
+  }
 
   /**
    * Sets the icon displayed according to directive argument
@@ -704,12 +704,12 @@ export class WalkthroughComponent implements AfterViewChecked {
     const iconTopWithPadding = iconTop + paddingTop - (iconHeight / 6);
     const iconRight = iconLeftWithPadding + iconWidth;
     const iconBottom = iconTopWithPadding + iconHeight;
-    //Check if text overlaps icon or user explicitly wants text at bottom, if does, move it to bottom
+    // Check if text overlaps icon or user explicitly wants text at bottom, if does, move it to bottom
     if (this.forceCaptionLocation === undefined && this.isItemOnText(iconLeftWithPadding, iconTopWithPadding, iconRight, iconBottom)) {
       this.forceCaptionLocation = 'BOTTOM';
     }
 
-    let iconLocation =
+    const iconLocation =
       'position: absolute;' +
       'left:' + iconLeftWithPadding + 'px;' +
       'top:' + iconTopWithPadding + 'px;';
@@ -721,17 +721,16 @@ export class WalkthroughComponent implements AfterViewChecked {
    */
   setElementLocations() {
     let selectorElements = (this.focusElementSelector) ? document.querySelectorAll(this.focusElementSelector) : null;
+
     if (selectorElements && selectorElements.length > 0) {
       if (selectorElements.length > 1) {
         console.warn('Multiple items fit selector, displaying first visible as focus item');
       }
-
-
-    }
-    else {
+    } else {
       console.error('No element found with selector: ' + this.focusElementSelector);
       selectorElements = null;
     }
+
     let htmlElement = null;
     if (selectorElements) {
       htmlElement = selectorElements[0] as HTMLElement;
@@ -769,7 +768,7 @@ export class WalkthroughComponent implements AfterViewChecked {
       }
     } else {
       if (this.focusElementSelector) {
-        console.info('Unable to find element requested to be focused: ' + this.focusElementSelector);
+        console.error('Unable to find element requested to be focused: ' + this.focusElementSelector);
       } else {
         // if tip mode with icon that we want to set padding to, set it
         if (this.walkthroughType === 'tip' &&
@@ -783,10 +782,10 @@ export class WalkthroughComponent implements AfterViewChecked {
     if (this.focusElementInteractive && selectorElements) {
       for (let i = 0; i < selectorElements.length; ++i) {
         const selectorElement: HTMLElement = selectorElements.item(i) as HTMLElement;
-        if (selectorElement.style.zIndex !== '99999' ) {
+        if (selectorElement.style.zIndex !== '99999') {
           this._focusElementZindexes[i] = (selectorElement.style.zIndex) ?
-              selectorElement.style.zIndex :
-              ZINDEX_NOT_SET;
+            selectorElement.style.zIndex :
+            ZINDEX_NOT_SET;
           selectorElement.style.zIndex = '99999';
         }
       }
@@ -796,13 +795,13 @@ export class WalkthroughComponent implements AfterViewChecked {
 
   /**
    * Sets the walkthrough focus hole on given params with padding
-   * @param left 
-   * @param top 
-   * @param width 
-   * @param height 
+   * @param left
+   * @param top
+   * @param width
+   * @param height
    */
   setFocus(left: number, top: number, width: number, height: number) {
-    let holeDimensions =
+    const holeDimensions =
       'left:' + (left - this.PADDING_HOLE) + 'px;' +
       'top:' + (top - this.PADDING_HOLE) + 'px;' +
       'width:' + (width + (2 * this.PADDING_HOLE)) + 'px;' +
@@ -810,7 +809,7 @@ export class WalkthroughComponent implements AfterViewChecked {
     if (this.walkthroughHoleElements) {
       this.walkthroughHoleElements.setAttribute('style', holeDimensions);
     }
-  };
+  }
 
   /**
    * Set the focus on one element
@@ -828,11 +827,11 @@ export class WalkthroughComponent implements AfterViewChecked {
 
   /**
    * Set the padding of the tip icon
-   * @param iconPaddingLeft 
-   * @param iconPaddingTop 
+   * @param iconPaddingLeft
+   * @param iconPaddingTop
    */
   setTipIconPadding(iconPaddingLeft: string, iconPaddingTop: string) {
-    var iconLocation = '';
+    let iconLocation = '';
     if (iconPaddingTop) {
       iconLocation += 'margin-top:' + iconPaddingTop + 'px;';
     }
@@ -844,7 +843,7 @@ export class WalkthroughComponent implements AfterViewChecked {
 
   /**
    * Close the walkthrough
-   * @param event 
+   * @param event
    */
   onCloseClicked(event: any) {
     if ((!this.useButton) ||
@@ -860,7 +859,7 @@ export class WalkthroughComponent implements AfterViewChecked {
   closeWalkthrough() {
     this.onWalkthroughHideEvent.emit();
     // to avoid disturbance with other SVG it is remove from the DOM
-    let arrowElement = this.element.nativeElement.querySelector(this.DOM_WALKTHROUGH_ARROW_CLASS);
+    const arrowElement = this.element.nativeElement.querySelector(this.DOM_WALKTHROUGH_ARROW_CLASS);
     if (arrowElement.children.length > 0) {
       arrowElement.children[0].remove();
     }
@@ -871,7 +870,6 @@ export class WalkthroughComponent implements AfterViewChecked {
     if (selectedElements) {
       for (let i = 0; i < selectedElements.length; ++i) {
         const curElement: HTMLElement = selectedElements.item(i) as HTMLElement;
-        console.log(`focus elem ${i} z-index is ${this._focusElementZindexes[i]} `);
         if (this._focusElementZindexes[i] !== ZINDEX_NOT_SET) {
           curElement.style.zIndex = this._focusElementZindexes[i];
         } else {
