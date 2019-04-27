@@ -9,4 +9,3 @@
 * CHANGE SELECTOR walkthrough -> ngx-walkthrough
 * New package method, lint code, minor corrections
 * Update to Angular -> 6
-* Update version tslib -> 1.9.3

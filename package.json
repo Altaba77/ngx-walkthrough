@@ -1,6 +1,6 @@
 {
   "name": "ngx-walkthrough",
-  "private": true,
+  "private": false,
   "version": "0.3.0",
   "description": "Build an Angular library compatible with AoT compilation and Tree shaking like an official package",
   "main": "./bundles/walkthrough.umd.js",
