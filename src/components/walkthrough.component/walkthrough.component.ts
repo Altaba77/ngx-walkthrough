@@ -6,7 +6,7 @@ import { Double_Tap } from './icons/Double_Tap';
 import { Single_Tap } from './icons/Single_Tap';
 import { Hotspot_Close } from './icons/Hotspot_Close';
 import { Component, Input, Output, HostListener, ElementRef, EventEmitter, ViewChild, SimpleChange } from '@angular/core';
-import { AfterViewChecked, OnChanges, SimpleChanges, AfterContentChecked } from '@angular/core/src/metadata/lifecycle_hooks';
+import { AfterViewChecked, OnChanges, SimpleChanges, AfterContentChecked } from '@angular/core';
 
 
 const ZINDEX_NOT_SET = '-99999';
