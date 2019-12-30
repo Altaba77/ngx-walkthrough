@@ -12,8 +12,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
         WalkthroughComponent
     ],
     imports: [
-        CommonModule,
-        BrowserModule
+        CommonModule
     ],
     exports: [
         // Pipes.

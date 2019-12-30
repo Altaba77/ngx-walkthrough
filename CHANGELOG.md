@@ -20,3 +20,10 @@
 
 - Fixed issue #10
 - version -> 0.3.1
+
+<a name="Dec 30, 2019"></a>
+
+### Dec 30, 2019
+
+- Fixed issue #12
+- version -> 0.3.2
